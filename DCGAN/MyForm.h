@@ -85,8 +85,8 @@ namespace DCGAN {
 
 	private: System::Windows::Forms::HScrollBar^ hScrollBar1;
 	private: System::Windows::Forms::DataVisualization::Charting::Chart^ chart1;
-	private: System::Windows::Forms::TextBox^ textBox10;
-	private: System::Windows::Forms::Label^ label8;
+
+
 	private: System::Windows::Forms::TextBox^ textBox11;
 	private: System::Windows::Forms::StatusStrip^ statusStrip1;
 	private: System::Windows::Forms::ToolStripStatusLabel^ toolStripStatusLabel1;
@@ -134,9 +134,11 @@ namespace DCGAN {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			System::Windows::Forms::DataVisualization::Charting::ChartArea^ chartArea8 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
-			System::Windows::Forms::DataVisualization::Charting::Legend^ legend8 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
-			System::Windows::Forms::DataVisualization::Charting::Series^ series8 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
+			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
+			System::Windows::Forms::DataVisualization::Charting::ChartArea^ chartArea1 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
+			System::Windows::Forms::DataVisualization::Charting::Legend^ legend1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
+			System::Windows::Forms::DataVisualization::Charting::Series^ series1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
+			System::Windows::Forms::DataVisualization::Charting::Series^ series2 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
 			this->label_g_1 = (gcnew System::Windows::Forms::Label());
 			this->tb_saveFolder = (gcnew System::Windows::Forms::TextBox());
 			this->cb_setNN = (gcnew System::Windows::Forms::ComboBox());
@@ -151,7 +153,6 @@ namespace DCGAN {
 			this->tabControl1 = (gcnew System::Windows::Forms::TabControl());
 			this->tabmain_generate = (gcnew System::Windows::Forms::TabPage());
 			this->tabmain_train = (gcnew System::Windows::Forms::TabPage());
-			this->label_tr_counter = (gcnew System::Windows::Forms::Label());
 			this->statusStrip1 = (gcnew System::Windows::Forms::StatusStrip());
 			this->toolStripStatusLabel1 = (gcnew System::Windows::Forms::ToolStripStatusLabel());
 			this->toolStripStatusLabel2 = (gcnew System::Windows::Forms::ToolStripStatusLabel());
@@ -161,10 +162,7 @@ namespace DCGAN {
 			this->toolStripProgressBar1 = (gcnew System::Windows::Forms::ToolStripProgressBar());
 			this->textBox11 = (gcnew System::Windows::Forms::TextBox());
 			this->btn_tr_startTraining = (gcnew System::Windows::Forms::Button());
-			this->hScrollBar1 = (gcnew System::Windows::Forms::HScrollBar());
 			this->groupBox1 = (gcnew System::Windows::Forms::GroupBox());
-			this->textBox10 = (gcnew System::Windows::Forms::TextBox());
-			this->label8 = (gcnew System::Windows::Forms::Label());
 			this->textBox9 = (gcnew System::Windows::Forms::TextBox());
 			this->label7 = (gcnew System::Windows::Forms::Label());
 			this->textBox8 = (gcnew System::Windows::Forms::TextBox());
@@ -182,7 +180,9 @@ namespace DCGAN {
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->tabControl2 = (gcnew System::Windows::Forms::TabControl());
 			this->tabImages = (gcnew System::Windows::Forms::TabPage());
+			this->label_tr_counter = (gcnew System::Windows::Forms::Label());
 			this->tableLayoutPanel1 = (gcnew System::Windows::Forms::TableLayoutPanel());
+			this->hScrollBar1 = (gcnew System::Windows::Forms::HScrollBar());
 			this->tabDiagram = (gcnew System::Windows::Forms::TabPage());
 			this->chart1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Chart());
 			this->tabControl1->SuspendLayout();
@@ -199,7 +199,7 @@ namespace DCGAN {
 			// label_g_1
 			// 
 			this->label_g_1->AutoSize = true;
-			this->label_g_1->Location = System::Drawing::Point(31, 23);
+			this->label_g_1->Location = System::Drawing::Point(22, 24);
 			this->label_g_1->Name = L"label_g_1";
 			this->label_g_1->Size = System::Drawing::Size(69, 13);
 			this->label_g_1->TabIndex = 0;
@@ -208,15 +208,17 @@ namespace DCGAN {
 			// 
 			// tb_saveFolder
 			// 
-			this->tb_saveFolder->Location = System::Drawing::Point(34, 104);
+			this->tb_saveFolder->Location = System::Drawing::Point(25, 97);
 			this->tb_saveFolder->Name = L"tb_saveFolder";
 			this->tb_saveFolder->Size = System::Drawing::Size(330, 20);
 			this->tb_saveFolder->TabIndex = 1;
 			// 
 			// cb_setNN
 			// 
+			this->cb_setNN->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
 			this->cb_setNN->FormattingEnabled = true;
-			this->cb_setNN->Location = System::Drawing::Point(34, 39);
+			this->cb_setNN->Items->AddRange(gcnew cli::array< System::Object^  >(1) { L"cats" });
+			this->cb_setNN->Location = System::Drawing::Point(25, 40);
 			this->cb_setNN->Name = L"cb_setNN";
 			this->cb_setNN->Size = System::Drawing::Size(330, 21);
 			this->cb_setNN->TabIndex = 3;
@@ -224,7 +226,7 @@ namespace DCGAN {
 			// label_g_2
 			// 
 			this->label_g_2->AutoSize = true;
-			this->label_g_2->Location = System::Drawing::Point(31, 88);
+			this->label_g_2->Location = System::Drawing::Point(22, 81);
 			this->label_g_2->Name = L"label_g_2";
 			this->label_g_2->Size = System::Drawing::Size(147, 13);
 			this->label_g_2->TabIndex = 4;
@@ -234,7 +236,7 @@ namespace DCGAN {
 			// label_g_3
 			// 
 			this->label_g_3->AutoSize = true;
-			this->label_g_3->Location = System::Drawing::Point(90, 152);
+			this->label_g_3->Location = System::Drawing::Point(75, 136);
 			this->label_g_3->Name = L"label_g_3";
 			this->label_g_3->Size = System::Drawing::Size(66, 13);
 			this->label_g_3->TabIndex = 5;
@@ -243,7 +245,7 @@ namespace DCGAN {
 			// label_g_4
 			// 
 			this->label_g_4->AutoSize = true;
-			this->label_g_4->Location = System::Drawing::Point(242, 152);
+			this->label_g_4->Location = System::Drawing::Point(227, 136);
 			this->label_g_4->Name = L"label_g_4";
 			this->label_g_4->Size = System::Drawing::Size(64, 13);
 			this->label_g_4->TabIndex = 6;
@@ -251,15 +253,17 @@ namespace DCGAN {
 			// 
 			// tb_setNumImages
 			// 
-			this->tb_setNumImages->Location = System::Drawing::Point(237, 167);
+			this->tb_setNumImages->Location = System::Drawing::Point(222, 151);
 			this->tb_setNumImages->Name = L"tb_setNumImages";
 			this->tb_setNumImages->Size = System::Drawing::Size(74, 20);
 			this->tb_setNumImages->TabIndex = 7;
 			// 
 			// cb_chooseFileFormat
 			// 
+			this->cb_chooseFileFormat->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
 			this->cb_chooseFileFormat->FormattingEnabled = true;
-			this->cb_chooseFileFormat->Location = System::Drawing::Point(87, 166);
+			this->cb_chooseFileFormat->Items->AddRange(gcnew cli::array< System::Object^  >(3) { L"JPG", L"PNG", L"BMP" });
+			this->cb_chooseFileFormat->Location = System::Drawing::Point(72, 150);
 			this->cb_chooseFileFormat->Name = L"cb_chooseFileFormat";
 			this->cb_chooseFileFormat->Size = System::Drawing::Size(74, 21);
 			this->cb_chooseFileFormat->TabIndex = 8;
@@ -267,15 +271,16 @@ namespace DCGAN {
 			// label_g_info
 			// 
 			this->label_g_info->AutoSize = true;
-			this->label_g_info->Location = System::Drawing::Point(181, 206);
+			this->label_g_info->Location = System::Drawing::Point(143, 189);
 			this->label_g_info->Name = L"label_g_info";
-			this->label_g_info->Size = System::Drawing::Size(35, 13);
+			this->label_g_info->Size = System::Drawing::Size(82, 13);
 			this->label_g_info->TabIndex = 9;
-			this->label_g_info->Text = L"label1";
+			this->label_g_info->Text = L"Attēli ir ģenerēti!";
+			this->label_g_info->Visible = false;
 			// 
 			// btn_generate
 			// 
-			this->btn_generate->Location = System::Drawing::Point(148, 232);
+			this->btn_generate->Location = System::Drawing::Point(133, 216);
 			this->btn_generate->Name = L"btn_generate";
 			this->btn_generate->Size = System::Drawing::Size(101, 37);
 			this->btn_generate->TabIndex = 10;
@@ -284,12 +289,13 @@ namespace DCGAN {
 			// 
 			// btn_g_callFolderset
 			// 
-			this->btn_g_callFolderset->Location = System::Drawing::Point(370, 104);
+			this->btn_g_callFolderset->Location = System::Drawing::Point(361, 97);
 			this->btn_g_callFolderset->Name = L"btn_g_callFolderset";
 			this->btn_g_callFolderset->Size = System::Drawing::Size(26, 20);
 			this->btn_g_callFolderset->TabIndex = 11;
 			this->btn_g_callFolderset->Text = L"...";
 			this->btn_g_callFolderset->UseVisualStyleBackColor = true;
+			this->btn_g_callFolderset->Click += gcnew System::EventHandler(this, &MyForm::btn_g_callFolderset_Click);
 			// 
 			// tabControl1
 			// 
@@ -300,7 +306,7 @@ namespace DCGAN {
 			this->tabControl1->MinimumSize = System::Drawing::Size(430, 330);
 			this->tabControl1->Name = L"tabControl1";
 			this->tabControl1->SelectedIndex = 0;
-			this->tabControl1->Size = System::Drawing::Size(683, 602);
+			this->tabControl1->Size = System::Drawing::Size(700, 614);
 			this->tabControl1->TabIndex = 12;
 			// 
 			// tabmain_generate
@@ -319,7 +325,7 @@ namespace DCGAN {
 			this->tabmain_generate->Location = System::Drawing::Point(4, 22);
 			this->tabmain_generate->Name = L"tabmain_generate";
 			this->tabmain_generate->Padding = System::Windows::Forms::Padding(3);
-			this->tabmain_generate->Size = System::Drawing::Size(675, 576);
+			this->tabmain_generate->Size = System::Drawing::Size(692, 588);
 			this->tabmain_generate->TabIndex = 0;
 			this->tabmain_generate->Text = L"Ģenerators";
 			this->tabmain_generate->UseVisualStyleBackColor = true;
@@ -340,19 +346,10 @@ namespace DCGAN {
 			this->tabmain_train->Location = System::Drawing::Point(4, 22);
 			this->tabmain_train->Name = L"tabmain_train";
 			this->tabmain_train->Padding = System::Windows::Forms::Padding(3);
-			this->tabmain_train->Size = System::Drawing::Size(675, 576);
+			this->tabmain_train->Size = System::Drawing::Size(692, 588);
 			this->tabmain_train->TabIndex = 1;
 			this->tabmain_train->Text = L"Apmācība";
 			this->tabmain_train->UseVisualStyleBackColor = true;
-			// 
-			// label_tr_counter
-			// 
-			this->label_tr_counter->AutoSize = true;
-			this->label_tr_counter->Location = System::Drawing::Point(3, 270);
-			this->label_tr_counter->Name = L"label_tr_counter";
-			this->label_tr_counter->Size = System::Drawing::Size(50, 13);
-			this->label_tr_counter->TabIndex = 28;
-			this->label_tr_counter->Text = L"Epoha: 0";
 			// 
 			// statusStrip1
 			// 
@@ -360,9 +357,9 @@ namespace DCGAN {
 				this->toolStripStatusLabel1,
 					this->toolStripStatusLabel2, this->toolStripStatusLabel3, this->toolStripStatusLabel4, this->toolStripStatusLabel5, this->toolStripProgressBar1
 			});
-			this->statusStrip1->Location = System::Drawing::Point(3, 350);
+			this->statusStrip1->Location = System::Drawing::Point(3, 362);
 			this->statusStrip1->Name = L"statusStrip1";
-			this->statusStrip1->Size = System::Drawing::Size(669, 22);
+			this->statusStrip1->Size = System::Drawing::Size(686, 22);
 			this->statusStrip1->SizingGrip = false;
 			this->statusStrip1->TabIndex = 0;
 			this->statusStrip1->Text = L"statusStrip1";
@@ -409,18 +406,20 @@ namespace DCGAN {
 			this->toolStripProgressBar1->Margin = System::Windows::Forms::Padding(10, 3, 1, 3);
 			this->toolStripProgressBar1->Name = L"toolStripProgressBar1";
 			this->toolStripProgressBar1->Size = System::Drawing::Size(320, 16);
+			this->toolStripProgressBar1->Value = 10;
 			this->toolStripProgressBar1->Click += gcnew System::EventHandler(this, &MyForm::toolStripProgressBar1_Click);
 			// 
 			// textBox11
 			// 
 			this->textBox11->Dock = System::Windows::Forms::DockStyle::Bottom;
-			this->textBox11->Location = System::Drawing::Point(3, 372);
+			this->textBox11->Location = System::Drawing::Point(3, 384);
 			this->textBox11->Multiline = true;
 			this->textBox11->Name = L"textBox11";
 			this->textBox11->ReadOnly = true;
 			this->textBox11->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
-			this->textBox11->Size = System::Drawing::Size(669, 201);
+			this->textBox11->Size = System::Drawing::Size(686, 201);
 			this->textBox11->TabIndex = 17;
+			this->textBox11->Text = resources->GetString(L"textBox11.Text");
 			this->textBox11->TextChanged += gcnew System::EventHandler(this, &MyForm::textBox11_TextChanged);
 			// 
 			// btn_tr_startTraining
@@ -429,24 +428,11 @@ namespace DCGAN {
 			this->btn_tr_startTraining->Name = L"btn_tr_startTraining";
 			this->btn_tr_startTraining->Size = System::Drawing::Size(101, 37);
 			this->btn_tr_startTraining->TabIndex = 16;
-			this->btn_tr_startTraining->Text = L"Sākt apmācibu";
+			this->btn_tr_startTraining->Text = L"Apturēt apmācību";
 			this->btn_tr_startTraining->UseVisualStyleBackColor = true;
-			// 
-			// hScrollBar1
-			// 
-			this->hScrollBar1->LargeChange = 1;
-			this->hScrollBar1->Location = System::Drawing::Point(6, 289);
-			this->hScrollBar1->Maximum = 10;
-			this->hScrollBar1->Minimum = 1;
-			this->hScrollBar1->Name = L"hScrollBar1";
-			this->hScrollBar1->Size = System::Drawing::Size(249, 18);
-			this->hScrollBar1->TabIndex = 16;
-			this->hScrollBar1->Value = 1;
 			// 
 			// groupBox1
 			// 
-			this->groupBox1->Controls->Add(this->textBox10);
-			this->groupBox1->Controls->Add(this->label8);
 			this->groupBox1->Controls->Add(this->textBox9);
 			this->groupBox1->Controls->Add(this->label7);
 			this->groupBox1->Controls->Add(this->textBox8);
@@ -464,33 +450,19 @@ namespace DCGAN {
 			this->groupBox1->TabStop = false;
 			this->groupBox1->Text = L"Hiperparametri";
 			// 
-			// textBox10
-			// 
-			this->textBox10->Location = System::Drawing::Point(229, 122);
-			this->textBox10->Name = L"textBox10";
-			this->textBox10->Size = System::Drawing::Size(74, 20);
-			this->textBox10->TabIndex = 27;
-			// 
-			// label8
-			// 
-			this->label8->AutoSize = true;
-			this->label8->Location = System::Drawing::Point(234, 107);
-			this->label8->Name = L"label8";
-			this->label8->Size = System::Drawing::Size(64, 13);
-			this->label8->TabIndex = 26;
-			this->label8->Text = L"Attēlu skaits";
-			// 
 			// textBox9
 			// 
-			this->textBox9->Location = System::Drawing::Point(125, 122);
+			this->textBox9->Enabled = false;
+			this->textBox9->Location = System::Drawing::Point(232, 122);
 			this->textBox9->Name = L"textBox9";
 			this->textBox9->Size = System::Drawing::Size(74, 20);
 			this->textBox9->TabIndex = 25;
+			this->textBox9->Text = L"0.2";
 			// 
 			// label7
 			// 
 			this->label7->AutoSize = true;
-			this->label7->Location = System::Drawing::Point(141, 107);
+			this->label7->Location = System::Drawing::Point(248, 107);
 			this->label7->Name = L"label7";
 			this->label7->Size = System::Drawing::Size(43, 13);
 			this->label7->TabIndex = 24;
@@ -498,10 +470,12 @@ namespace DCGAN {
 			// 
 			// textBox8
 			// 
+			this->textBox8->Enabled = false;
 			this->textBox8->Location = System::Drawing::Point(20, 122);
 			this->textBox8->Name = L"textBox8";
 			this->textBox8->Size = System::Drawing::Size(74, 20);
 			this->textBox8->TabIndex = 23;
+			this->textBox8->Text = L"10";
 			// 
 			// label6
 			// 
@@ -514,10 +488,12 @@ namespace DCGAN {
 			// 
 			// textBox7
 			// 
+			this->textBox7->Enabled = false;
 			this->textBox7->Location = System::Drawing::Point(229, 54);
 			this->textBox7->Name = L"textBox7";
 			this->textBox7->Size = System::Drawing::Size(74, 20);
 			this->textBox7->TabIndex = 21;
+			this->textBox7->Text = L"0.5";
 			// 
 			// label5
 			// 
@@ -530,15 +506,17 @@ namespace DCGAN {
 			// 
 			// textBox6
 			// 
-			this->textBox6->Location = System::Drawing::Point(125, 54);
+			this->textBox6->Enabled = false;
+			this->textBox6->Location = System::Drawing::Point(124, 87);
 			this->textBox6->Name = L"textBox6";
 			this->textBox6->Size = System::Drawing::Size(74, 20);
 			this->textBox6->TabIndex = 19;
+			this->textBox6->Text = L"0.002";
 			// 
 			// label4
 			// 
 			this->label4->AutoSize = true;
-			this->label4->Location = System::Drawing::Point(145, 38);
+			this->label4->Location = System::Drawing::Point(144, 71);
 			this->label4->Name = L"label4";
 			this->label4->Size = System::Drawing::Size(39, 13);
 			this->label4->TabIndex = 18;
@@ -546,10 +524,12 @@ namespace DCGAN {
 			// 
 			// textBox5
 			// 
+			this->textBox5->Enabled = false;
 			this->textBox5->Location = System::Drawing::Point(20, 54);
 			this->textBox5->Name = L"textBox5";
 			this->textBox5->Size = System::Drawing::Size(74, 20);
 			this->textBox5->TabIndex = 17;
+			this->textBox5->Text = L"128";
 			// 
 			// label3
 			// 
@@ -563,13 +543,16 @@ namespace DCGAN {
 			// 
 			// textBox4
 			// 
+			this->textBox4->Enabled = false;
 			this->textBox4->Location = System::Drawing::Point(25, 97);
 			this->textBox4->Name = L"textBox4";
 			this->textBox4->Size = System::Drawing::Size(330, 20);
 			this->textBox4->TabIndex = 12;
+			this->textBox4->Text = L"D:\\data_sets\\cats";
 			// 
 			// btn_tr_callFolderset
 			// 
+			this->btn_tr_callFolderset->Enabled = false;
 			this->btn_tr_callFolderset->Location = System::Drawing::Point(361, 97);
 			this->btn_tr_callFolderset->Name = L"btn_tr_callFolderset";
 			this->btn_tr_callFolderset->Size = System::Drawing::Size(26, 20);
@@ -588,10 +571,12 @@ namespace DCGAN {
 			// 
 			// textBox3
 			// 
+			this->textBox3->Enabled = false;
 			this->textBox3->Location = System::Drawing::Point(25, 40);
 			this->textBox3->Name = L"textBox3";
 			this->textBox3->Size = System::Drawing::Size(330, 20);
 			this->textBox3->TabIndex = 2;
+			this->textBox3->Text = L"cats";
 			// 
 			// label1
 			// 
@@ -610,7 +595,7 @@ namespace DCGAN {
 			this->tabControl2->Location = System::Drawing::Point(402, 6);
 			this->tabControl2->Name = L"tabControl2";
 			this->tabControl2->SelectedIndex = 0;
-			this->tabControl2->Size = System::Drawing::Size(266, 341);
+			this->tabControl2->Size = System::Drawing::Size(273, 341);
 			this->tabControl2->TabIndex = 0;
 			// 
 			// tabImages
@@ -621,32 +606,53 @@ namespace DCGAN {
 			this->tabImages->Location = System::Drawing::Point(4, 22);
 			this->tabImages->Name = L"tabImages";
 			this->tabImages->Padding = System::Windows::Forms::Padding(3);
-			this->tabImages->Size = System::Drawing::Size(258, 315);
+			this->tabImages->Size = System::Drawing::Size(265, 315);
 			this->tabImages->TabIndex = 1;
 			this->tabImages->Text = L"Attēli";
 			this->tabImages->UseVisualStyleBackColor = true;
 			// 
+			// label_tr_counter
+			// 
+			this->label_tr_counter->AutoSize = true;
+			this->label_tr_counter->Location = System::Drawing::Point(3, 270);
+			this->label_tr_counter->Name = L"label_tr_counter";
+			this->label_tr_counter->Size = System::Drawing::Size(50, 13);
+			this->label_tr_counter->TabIndex = 28;
+			this->label_tr_counter->Text = L"Epoha: 1";
+			// 
 			// tableLayoutPanel1
 			// 
+			this->tableLayoutPanel1->CellBorderStyle = System::Windows::Forms::TableLayoutPanelCellBorderStyle::Single;
 			this->tableLayoutPanel1->ColumnCount = 4;
-			this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
-				25)));
-			this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
-				25)));
-			this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
-				25)));
-			this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
-				25)));
+			this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute,
+				64)));
+			this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute,
+				64)));
+			this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute,
+				64)));
+			this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute,
+				71)));
 			this->tableLayoutPanel1->Location = System::Drawing::Point(0, 0);
 			this->tableLayoutPanel1->Name = L"tableLayoutPanel1";
 			this->tableLayoutPanel1->RowCount = 4;
-			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 25)));
-			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 25)));
-			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 25)));
-			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 25)));
-			this->tableLayoutPanel1->Size = System::Drawing::Size(256, 256);
+			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 64)));
+			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 64)));
+			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 64)));
+			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 64)));
+			this->tableLayoutPanel1->Size = System::Drawing::Size(262, 256);
 			this->tableLayoutPanel1->TabIndex = 0;
 			this->tableLayoutPanel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MyForm::tableLayoutPanel1_Paint);
+			// 
+			// hScrollBar1
+			// 
+			this->hScrollBar1->LargeChange = 1;
+			this->hScrollBar1->Location = System::Drawing::Point(6, 289);
+			this->hScrollBar1->Maximum = 2;
+			this->hScrollBar1->Minimum = 1;
+			this->hScrollBar1->Name = L"hScrollBar1";
+			this->hScrollBar1->Size = System::Drawing::Size(249, 18);
+			this->hScrollBar1->TabIndex = 16;
+			this->hScrollBar1->Value = 2;
 			// 
 			// tabDiagram
 			// 
@@ -654,23 +660,33 @@ namespace DCGAN {
 			this->tabDiagram->Location = System::Drawing::Point(4, 22);
 			this->tabDiagram->Name = L"tabDiagram";
 			this->tabDiagram->Padding = System::Windows::Forms::Padding(3);
-			this->tabDiagram->Size = System::Drawing::Size(258, 315);
+			this->tabDiagram->Size = System::Drawing::Size(265, 315);
 			this->tabDiagram->TabIndex = 2;
 			this->tabDiagram->Text = L"Diagramma";
 			this->tabDiagram->UseVisualStyleBackColor = true;
 			// 
 			// chart1
 			// 
-			chartArea8->Name = L"ChartArea1";
-			this->chart1->ChartAreas->Add(chartArea8);
-			legend8->Name = L"Legend1";
-			this->chart1->Legends->Add(legend8);
+			chartArea1->Name = L"ChartArea1";
+			this->chart1->ChartAreas->Add(chartArea1);
+			legend1->Docking = System::Windows::Forms::DataVisualization::Charting::Docking::Top;
+			legend1->Name = L"Legend1";
+			this->chart1->Legends->Add(legend1);
 			this->chart1->Location = System::Drawing::Point(0, 0);
 			this->chart1->Name = L"chart1";
-			series8->ChartArea = L"ChartArea1";
-			series8->Legend = L"Legend1";
-			series8->Name = L"Series1";
-			this->chart1->Series->Add(series8);
+			series1->BorderWidth = 3;
+			series1->ChartArea = L"ChartArea1";
+			series1->Color = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+				static_cast<System::Int32>(static_cast<System::Byte>(192)));
+			series1->Legend = L"Legend1";
+			series1->Name = L"L(D)";
+			series2->BorderWidth = 3;
+			series2->ChartArea = L"ChartArea1";
+			series2->Color = System::Drawing::Color::Red;
+			series2->Legend = L"Legend1";
+			series2->Name = L"L(G)";
+			this->chart1->Series->Add(series1);
+			this->chart1->Series->Add(series2);
 			this->chart1->Size = System::Drawing::Size(256, 315);
 			this->chart1->TabIndex = 17;
 			this->chart1->Text = L"chart1";
@@ -680,9 +696,10 @@ namespace DCGAN {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(683, 602);
+			this->ClientSize = System::Drawing::Size(700, 614);
 			this->Controls->Add(this->tabControl1);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
+			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->Name = L"MyForm";
 			this->Text = L"DCGAN";
 			this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
@@ -719,6 +736,8 @@ private: System::Void tabPage1_Click(System::Object^ sender, System::EventArgs^ 
 
 
 private: System::Void chart1_Click(System::Object^ sender, System::EventArgs^ e) {
+	this->chart1->Series[0]->Points->AddXY(1, 5.321);
+	this->chart1->Series[1]->Points->AddXY(1, 10.345);
 }
 private: System::Void textBox11_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 }
@@ -733,6 +752,15 @@ private: System::Void label3_Click(System::Object^ sender, System::EventArgs^ e)
 private: System::Void tableLayoutPanel1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
 }
 private: System::Void statusStrip1_ItemClicked(System::Object^ sender, System::Windows::Forms::ToolStripItemClickedEventArgs^ e) {
+}
+
+private: System::Void btn_g_callFolderset_Click(System::Object^ sender, System::EventArgs^ e) {
+	FolderBrowserDialog^ openFileDialog1 = gcnew FolderBrowserDialog;
+
+	if (openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+	{
+		tb_saveFolder->Text = openFileDialog1->SelectedPath;
+	}
 }
 };
 }

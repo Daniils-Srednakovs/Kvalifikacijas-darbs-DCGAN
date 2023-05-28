@@ -79,6 +79,8 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\cpplib\stb-master</AdditionalIncludeDirectories>
+      <SDLCheck>false</SDLCheck>
     </ClCompile>
     <Link>
       <AdditionalDependencies />
@@ -122,12 +124,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="imagerw.cpp" />
     <ClCompile Include="MyForm.cpp" />
+    <ClCompile Include="neuralnetwork.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="imagerw.h" />
     <ClInclude Include="MyForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="neuralnetwork.h" />
+    <ClInclude Include="tensor.h" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MyForm.resx">

@@ -8,27 +8,18 @@ extern "C" {
 
 //_CRT_SECURE_NO_WARNINGS SDL CHECK IS OFF IN PROJECT PROPERTIES C/C++/GENERAL
 
-bool load_image(std::vector<unsigned char>& image, const std::string& filename, int& x, int& y)
-{
-    int n;
-    unsigned char* data = stbi_load(filename.c_str(), &x, &y, &n, 3);
-    if (data != nullptr)
-    {
-        image = std::vector<unsigned char>(data, data + x * y * 3);
-    }
-    stbi_image_free(data);
-    return (data != nullptr);
-}
-
-Tensor3d<double> getImageValues(std::string filename)
+void ImageProcessing::getImageValues(Tensor3d<double>& ix, std::wstring wfilename)
 {
     int width, height;
     std::vector<unsigned char> image;
-    bool success = load_image(image, filename, width, height);
-    if (!success)
+    int n;
+    CStringA filename(wfilename.c_str());
+    unsigned char* data = stbi_load(filename, &width, &height, &n, 3);
+    if (data != nullptr)
     {
-        throw std::exception("Error: loading image failed\n");
+        image = std::vector<unsigned char>(data, data + width * height * 3);
     }
+    stbi_image_free(data);
 
     const size_t RGB = 3;
 
@@ -43,12 +34,11 @@ Tensor3d<double> getImageValues(std::string filename)
         }
     }
 
-    return iv;
+    ix = iv;
 }
 
-void normalizeImageValues(Tensor3d<double>& x, double oldMin, double oldMax, double newMin, double newMax) {
+void ImageProcessing::normalizeImageValues(Tensor3d<double>& x, double oldMin, double oldMax, double newMin, double newMax) {
 
-    //vozmozhno pridetsa zamenit min na znachenija minimalnie konkretno v tensore
     double oldRange = oldMax - oldMin;
     double newRange = newMax - newMin;
 
@@ -62,7 +52,7 @@ void normalizeImageValues(Tensor3d<double>& x, double oldMin, double oldMax, dou
     }
 }
 
-void save_jpg_image(Tensor3d<double>& x, std::string filename)
+void ImageProcessing::save_jpg_image(Tensor3d<double>& x, std::wstring wfilename)
 {
     unsigned char data[64 * 64 * 3];
 
@@ -79,5 +69,48 @@ void save_jpg_image(Tensor3d<double>& x, std::string filename)
         }
     }
 
-    stbi_write_jpg(filename.c_str(), w, h, c, data, w * c);
+    CStringA filename(wfilename.c_str());
+    stbi_write_jpg(filename, w, h, c, data, w * c);
+}
+
+void ImageProcessing::save_png_image(Tensor3d<double>& x, std::wstring wfilename)
+{
+    unsigned char data[64 * 64 * 3];
+
+    int w = static_cast<int>(x.getY());
+    int h = static_cast<int>(x.getX());
+    int c = 3;
+
+    int index = 0;
+    for (int i = 0; i < h; i++) {
+        for (int j = 0; j < w; ++j) {
+            for (int k = 0; k < c; k++) {
+                data[index++] = static_cast<int>(round(x(i, j, k)));
+            }
+        }
+    }
+
+    CStringA filename(wfilename.c_str());
+    stbi_write_png(filename, w, h, c, data, 32);
+}
+
+void ImageProcessing::save_bmp_image(Tensor3d<double>& x, std::wstring wfilename)
+{
+    unsigned char data[64 * 64 * 3];
+
+    int w = static_cast<int>(x.getY());
+    int h = static_cast<int>(x.getX());
+    int c = 3;
+
+    int index = 0;
+    for (int i = 0; i < h; i++) {
+        for (int j = 0; j < w; ++j) {
+            for (int k = 0; k < c; k++) {
+                data[index++] = static_cast<int>(round(x(i, j, k)));
+            }
+        }
+    }
+
+    CStringA filename(wfilename.c_str());
+    stbi_write_bmp(filename, w, h, c, data);
 }

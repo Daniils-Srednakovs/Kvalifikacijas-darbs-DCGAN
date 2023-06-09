@@ -4,8 +4,11 @@
 template<typename T>
 class Tensor3d {
 private:
-    T*** tv;
-    size_t x, y, z;
+    T*** tv = nullptr;
+    size_t x = 0;
+    size_t y = 0;
+    size_t z = 0;
+    //size_t x, y, z = 0;
 
 public:
     Tensor3d()
@@ -56,6 +59,58 @@ public:
         }
     }
 
+    void appendPadding(size_t pad)
+    {
+        Tensor3d<double> nX(x + pad * 2, y + pad * 2, z);
+        nX.fill();
+
+        for (size_t i = pad; i < x + pad; i++) {
+            for (size_t j = pad; j < y + pad; j++) {
+                for (size_t k = 0; k < nX.getZ(); k++)
+                {
+                    nX(i, j, k) = this->tv[i - pad][j - pad][k];
+                }
+            }
+        }
+
+        *this = nX;
+    }
+
+    void interweave()
+    {
+        Tensor3d<double> nX(x * 2, y * 2, z);
+        nX.fill();
+
+        for (size_t i = 0; i < x; ++i) {
+            for (size_t j = 0; j < y; ++j) {
+                for (size_t k = 0; k < z; ++k) {
+                    nX(i * 2, j * 2, k) = this->tv[i][j][k];
+                    nX(i * 2 + 1, j * 2, k) = 0;
+                    nX(i * 2, j * 2 + 1, k) = 0;
+                    nX(i * 2 + 1, j * 2 + 1, k) = 0;
+                }
+            }
+        }
+
+        *this = nX;
+    }
+
+    void appendTransposedPadding(size_t pad)
+    {
+        Tensor3d<double> nX(x - pad * 2, y - pad * 2, z);
+
+        for (size_t i = 0; i < nX.getX(); i++) {
+            for (size_t j = 0; j < nX.getY(); j++) {
+                for (size_t k = 0; k < nX.getZ(); k++)
+                {
+                    nX(i, j, k) = this->tv[i + pad][j + pad][k];
+                }
+            }
+        }
+
+        *this = nX;
+    }
+
     T& operator()(size_t x, size_t y, size_t z)
     {
         return tv[x][y][z];
@@ -63,25 +118,25 @@ public:
     Tensor3d& operator = (const Tensor3d& other)
     {
 
-        if (tv != nullptr) {
+        if (this->tv != nullptr) {
             for (size_t i = 0; i < x; i++) {
                 for (size_t j = 0; j < y; j++) {
-                    delete[] tv[i][j];
+                    delete[] this->tv[i][j];
                 }
-                delete[] tv[i];
+                delete[] this->tv[i];
             }
-            delete[] tv;
+            delete[] this->tv;
         }
 
         x = other.x;
         y = other.y;
         z = other.z;
 
-        tv = new T * *[x];
+        this->tv = new T * *[x];
         for (size_t i = 0; i < x; i++) {
-            tv[i] = new T * [y];
+            this->tv[i] = new T * [y];
             for (size_t j = 0; j < y; j++) {
-                tv[i][j] = new T[z];
+                this->tv[i][j] = new T[z];
             }
         }
 
@@ -116,8 +171,12 @@ public:
 template<typename T>
 class Tensor4d {
 private:
-    T**** tv;
-    size_t x, y, z, d;
+    T**** tv = nullptr;
+    size_t x = 0;
+    size_t y = 0;
+    size_t z = 0;
+    size_t d = 0;
+    //size_t x, y, z, d = 0;
 public:
     Tensor4d()
     {
@@ -178,6 +237,22 @@ public:
                 }
             }
         }
+    }
+
+    void rotate180()
+    {
+        Tensor4d<double> ntv(x, y, z, d);
+        for (size_t i = 0; i < x; i++) {
+            for (size_t j = 0; j < y; j++) {
+                for (size_t k = 0; k < z; k++) {
+                    for (size_t l = 0; l < d; l++) {
+                        ntv(i, j, k, l) = this->tv[x - 1 - i][y - 1 - j][z - 1 - k][d - 1 - l];
+                    }
+                }
+            }
+        }
+
+        *this = ntv;
     }
 
     T& operator()(size_t x, size_t y, size_t z, size_t d)

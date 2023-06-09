@@ -1,5 +1,30 @@
 ﻿#pragma once
 
+#include <sys/stat.h>
+#include <string>
+#include <filesystem>
+#include <iostream>
+#include <shlobj.h>
+#include <msclr\marshal_cppstd.h>
+#include <thread>
+//asdasda
+//asdasdads
+
+#include "imagerw.h"
+#include "tensor.h"
+#include "neuralnetwork.h"
+#include "wrapper.h"
+
+#pragma comment(lib, "shell32.lib")
+
+std::wstring getDocPath()
+{
+	PWSTR getpath = NULL;
+	SHGetKnownFolderPath(FOLDERID_Documents, 0, NULL, &getpath);
+	std::wstring wpath(getpath);
+	return wpath;
+}
+
 namespace DCGAN {
 
 	using namespace System;
@@ -60,42 +85,67 @@ namespace DCGAN {
 
 	private: System::Windows::Forms::GroupBox^ groupBox1;
 	private: System::Windows::Forms::Button^ btn_tr_startTraining;
+	private: System::Windows::Forms::TextBox^ tr_tb_novirze;
 
-	private: System::Windows::Forms::TextBox^ textBox9;
+
 	private: System::Windows::Forms::Label^ label7;
-	private: System::Windows::Forms::TextBox^ textBox8;
+	private: System::Windows::Forms::TextBox^ tr_tb_epohs;
+
 	private: System::Windows::Forms::Label^ label6;
-	private: System::Windows::Forms::TextBox^ textBox7;
+	private: System::Windows::Forms::TextBox^ tr_tb_moments;
+
 	private: System::Windows::Forms::Label^ label5;
-	private: System::Windows::Forms::TextBox^ textBox6;
+	private: System::Windows::Forms::TextBox^ tr_tb_learningR;
+
+
 	private: System::Windows::Forms::Label^ label4;
-	private: System::Windows::Forms::TextBox^ textBox5;
+	private: System::Windows::Forms::TextBox^ tr_tb_batchS;
+
 	private: System::Windows::Forms::Label^ label3;
-	private: System::Windows::Forms::TextBox^ textBox4;
+	private: System::Windows::Forms::TextBox^ tb_dataset;
+
 	private: System::Windows::Forms::Button^ btn_tr_callFolderset;
 
 	private: System::Windows::Forms::Label^ label2;
-	private: System::Windows::Forms::TextBox^ textBox3;
+	private: System::Windows::Forms::TextBox^ tr_tb_nnName;
+
 	private: System::Windows::Forms::Label^ label1;
 	private: System::Windows::Forms::TabControl^ tabControl2;
 	private: System::Windows::Forms::TabPage^ tabImages;
+	private: System::Windows::Forms::TableLayoutPanel^ tr_imageLayout;
 
-	private: System::Windows::Forms::TableLayoutPanel^ tableLayoutPanel1;
+
 	private: System::Windows::Forms::TabPage^ tabDiagram;
+	private: System::Windows::Forms::HScrollBar^ tr_imagesScroll;
+	private: System::Windows::Forms::DataVisualization::Charting::Chart^ chart;
 
-	private: System::Windows::Forms::HScrollBar^ hScrollBar1;
-	private: System::Windows::Forms::DataVisualization::Charting::Chart^ chart1;
 
 
-	private: System::Windows::Forms::TextBox^ textBox11;
+
+
+	private: System::Windows::Forms::TextBox^ tr_tb_infobox;
+
+
+
 	private: System::Windows::Forms::StatusStrip^ statusStrip1;
 	private: System::Windows::Forms::ToolStripStatusLabel^ toolStripStatusLabel1;
 	private: System::Windows::Forms::ToolStripStatusLabel^ toolStripStatusLabel2;
 	private: System::Windows::Forms::ToolStripStatusLabel^ toolStripStatusLabel3;
 	private: System::Windows::Forms::ToolStripStatusLabel^ toolStripStatusLabel4;
 	private: System::Windows::Forms::ToolStripStatusLabel^ toolStripStatusLabel5;
-	private: System::Windows::Forms::ToolStripProgressBar^ toolStripProgressBar1;
+	private: System::Windows::Forms::ToolStripProgressBar^ toolStripProgressBar;
+
+	private:
+
+
 	private: System::Windows::Forms::Label^ label_tr_counter;
+	private: System::ComponentModel::BackgroundWorker^ generateImageBWorker;
+	private: System::ComponentModel::BackgroundWorker^ trainingBWorker;
+
+
+
+
+
 
 
 
@@ -134,11 +184,11 @@ namespace DCGAN {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
 			System::Windows::Forms::DataVisualization::Charting::ChartArea^ chartArea1 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
 			System::Windows::Forms::DataVisualization::Charting::Legend^ legend1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
 			System::Windows::Forms::DataVisualization::Charting::Series^ series1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
 			System::Windows::Forms::DataVisualization::Charting::Series^ series2 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
+			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
 			this->label_g_1 = (gcnew System::Windows::Forms::Label());
 			this->tb_saveFolder = (gcnew System::Windows::Forms::TextBox());
 			this->cb_setNN = (gcnew System::Windows::Forms::ComboBox());
@@ -159,32 +209,34 @@ namespace DCGAN {
 			this->toolStripStatusLabel3 = (gcnew System::Windows::Forms::ToolStripStatusLabel());
 			this->toolStripStatusLabel4 = (gcnew System::Windows::Forms::ToolStripStatusLabel());
 			this->toolStripStatusLabel5 = (gcnew System::Windows::Forms::ToolStripStatusLabel());
-			this->toolStripProgressBar1 = (gcnew System::Windows::Forms::ToolStripProgressBar());
-			this->textBox11 = (gcnew System::Windows::Forms::TextBox());
+			this->toolStripProgressBar = (gcnew System::Windows::Forms::ToolStripProgressBar());
+			this->tr_tb_infobox = (gcnew System::Windows::Forms::TextBox());
 			this->btn_tr_startTraining = (gcnew System::Windows::Forms::Button());
 			this->groupBox1 = (gcnew System::Windows::Forms::GroupBox());
-			this->textBox9 = (gcnew System::Windows::Forms::TextBox());
+			this->tr_tb_novirze = (gcnew System::Windows::Forms::TextBox());
 			this->label7 = (gcnew System::Windows::Forms::Label());
-			this->textBox8 = (gcnew System::Windows::Forms::TextBox());
+			this->tr_tb_epohs = (gcnew System::Windows::Forms::TextBox());
 			this->label6 = (gcnew System::Windows::Forms::Label());
-			this->textBox7 = (gcnew System::Windows::Forms::TextBox());
+			this->tr_tb_moments = (gcnew System::Windows::Forms::TextBox());
 			this->label5 = (gcnew System::Windows::Forms::Label());
-			this->textBox6 = (gcnew System::Windows::Forms::TextBox());
+			this->tr_tb_learningR = (gcnew System::Windows::Forms::TextBox());
 			this->label4 = (gcnew System::Windows::Forms::Label());
-			this->textBox5 = (gcnew System::Windows::Forms::TextBox());
+			this->tr_tb_batchS = (gcnew System::Windows::Forms::TextBox());
 			this->label3 = (gcnew System::Windows::Forms::Label());
-			this->textBox4 = (gcnew System::Windows::Forms::TextBox());
+			this->tb_dataset = (gcnew System::Windows::Forms::TextBox());
 			this->btn_tr_callFolderset = (gcnew System::Windows::Forms::Button());
 			this->label2 = (gcnew System::Windows::Forms::Label());
-			this->textBox3 = (gcnew System::Windows::Forms::TextBox());
+			this->tr_tb_nnName = (gcnew System::Windows::Forms::TextBox());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->tabControl2 = (gcnew System::Windows::Forms::TabControl());
 			this->tabImages = (gcnew System::Windows::Forms::TabPage());
 			this->label_tr_counter = (gcnew System::Windows::Forms::Label());
-			this->tableLayoutPanel1 = (gcnew System::Windows::Forms::TableLayoutPanel());
-			this->hScrollBar1 = (gcnew System::Windows::Forms::HScrollBar());
+			this->tr_imageLayout = (gcnew System::Windows::Forms::TableLayoutPanel());
+			this->tr_imagesScroll = (gcnew System::Windows::Forms::HScrollBar());
 			this->tabDiagram = (gcnew System::Windows::Forms::TabPage());
-			this->chart1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Chart());
+			this->chart = (gcnew System::Windows::Forms::DataVisualization::Charting::Chart());
+			this->generateImageBWorker = (gcnew System::ComponentModel::BackgroundWorker());
+			this->trainingBWorker = (gcnew System::ComponentModel::BackgroundWorker());
 			this->tabControl1->SuspendLayout();
 			this->tabmain_generate->SuspendLayout();
 			this->tabmain_train->SuspendLayout();
@@ -193,7 +245,7 @@ namespace DCGAN {
 			this->tabControl2->SuspendLayout();
 			this->tabImages->SuspendLayout();
 			this->tabDiagram->SuspendLayout();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart1))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// label_g_1
@@ -217,11 +269,11 @@ namespace DCGAN {
 			// 
 			this->cb_setNN->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
 			this->cb_setNN->FormattingEnabled = true;
-			this->cb_setNN->Items->AddRange(gcnew cli::array< System::Object^  >(1) { L"cats" });
 			this->cb_setNN->Location = System::Drawing::Point(25, 40);
 			this->cb_setNN->Name = L"cb_setNN";
 			this->cb_setNN->Size = System::Drawing::Size(330, 21);
 			this->cb_setNN->TabIndex = 3;
+			this->cb_setNN->Click += gcnew System::EventHandler(this, &MyForm::cb_setNN_Click);
 			// 
 			// label_g_2
 			// 
@@ -236,7 +288,7 @@ namespace DCGAN {
 			// label_g_3
 			// 
 			this->label_g_3->AutoSize = true;
-			this->label_g_3->Location = System::Drawing::Point(75, 136);
+			this->label_g_3->Location = System::Drawing::Point(74, 141);
 			this->label_g_3->Name = L"label_g_3";
 			this->label_g_3->Size = System::Drawing::Size(66, 13);
 			this->label_g_3->TabIndex = 5;
@@ -245,7 +297,7 @@ namespace DCGAN {
 			// label_g_4
 			// 
 			this->label_g_4->AutoSize = true;
-			this->label_g_4->Location = System::Drawing::Point(227, 136);
+			this->label_g_4->Location = System::Drawing::Point(226, 141);
 			this->label_g_4->Name = L"label_g_4";
 			this->label_g_4->Size = System::Drawing::Size(64, 13);
 			this->label_g_4->TabIndex = 6;
@@ -253,7 +305,7 @@ namespace DCGAN {
 			// 
 			// tb_setNumImages
 			// 
-			this->tb_setNumImages->Location = System::Drawing::Point(222, 151);
+			this->tb_setNumImages->Location = System::Drawing::Point(221, 156);
 			this->tb_setNumImages->Name = L"tb_setNumImages";
 			this->tb_setNumImages->Size = System::Drawing::Size(74, 20);
 			this->tb_setNumImages->TabIndex = 7;
@@ -263,7 +315,7 @@ namespace DCGAN {
 			this->cb_chooseFileFormat->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
 			this->cb_chooseFileFormat->FormattingEnabled = true;
 			this->cb_chooseFileFormat->Items->AddRange(gcnew cli::array< System::Object^  >(3) { L"JPG", L"PNG", L"BMP" });
-			this->cb_chooseFileFormat->Location = System::Drawing::Point(72, 150);
+			this->cb_chooseFileFormat->Location = System::Drawing::Point(71, 155);
 			this->cb_chooseFileFormat->Name = L"cb_chooseFileFormat";
 			this->cb_chooseFileFormat->Size = System::Drawing::Size(74, 21);
 			this->cb_chooseFileFormat->TabIndex = 8;
@@ -271,21 +323,24 @@ namespace DCGAN {
 			// label_g_info
 			// 
 			this->label_g_info->AutoSize = true;
-			this->label_g_info->Location = System::Drawing::Point(143, 189);
+			this->label_g_info->Location = System::Drawing::Point(109, 196);
+			this->label_g_info->MinimumSize = System::Drawing::Size(150, 0);
 			this->label_g_info->Name = L"label_g_info";
-			this->label_g_info->Size = System::Drawing::Size(82, 13);
+			this->label_g_info->Size = System::Drawing::Size(150, 13);
 			this->label_g_info->TabIndex = 9;
-			this->label_g_info->Text = L"Attēli ir ģenerēti!";
+			this->label_g_info->Text = L"label";
+			this->label_g_info->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			this->label_g_info->Visible = false;
 			// 
 			// btn_generate
 			// 
-			this->btn_generate->Location = System::Drawing::Point(133, 216);
+			this->btn_generate->Location = System::Drawing::Point(132, 221);
 			this->btn_generate->Name = L"btn_generate";
 			this->btn_generate->Size = System::Drawing::Size(101, 37);
 			this->btn_generate->TabIndex = 10;
 			this->btn_generate->Text = L"Ģenerēt attēlu";
 			this->btn_generate->UseVisualStyleBackColor = true;
+			this->btn_generate->Click += gcnew System::EventHandler(this, &MyForm::btn_generate_Click);
 			// 
 			// btn_g_callFolderset
 			// 
@@ -306,8 +361,9 @@ namespace DCGAN {
 			this->tabControl1->MinimumSize = System::Drawing::Size(430, 330);
 			this->tabControl1->Name = L"tabControl1";
 			this->tabControl1->SelectedIndex = 0;
-			this->tabControl1->Size = System::Drawing::Size(700, 614);
+			this->tabControl1->Size = System::Drawing::Size(704, 611);
 			this->tabControl1->TabIndex = 12;
+			this->tabControl1->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm::tabControl1_SelectedIndexChanged);
 			// 
 			// tabmain_generate
 			// 
@@ -325,7 +381,7 @@ namespace DCGAN {
 			this->tabmain_generate->Location = System::Drawing::Point(4, 22);
 			this->tabmain_generate->Name = L"tabmain_generate";
 			this->tabmain_generate->Padding = System::Windows::Forms::Padding(3);
-			this->tabmain_generate->Size = System::Drawing::Size(692, 588);
+			this->tabmain_generate->Size = System::Drawing::Size(696, 585);
 			this->tabmain_generate->TabIndex = 0;
 			this->tabmain_generate->Text = L"Ģenerators";
 			this->tabmain_generate->UseVisualStyleBackColor = true;
@@ -334,19 +390,19 @@ namespace DCGAN {
 			// tabmain_train
 			// 
 			this->tabmain_train->Controls->Add(this->statusStrip1);
-			this->tabmain_train->Controls->Add(this->textBox11);
+			this->tabmain_train->Controls->Add(this->tr_tb_infobox);
 			this->tabmain_train->Controls->Add(this->btn_tr_startTraining);
 			this->tabmain_train->Controls->Add(this->groupBox1);
-			this->tabmain_train->Controls->Add(this->textBox4);
+			this->tabmain_train->Controls->Add(this->tb_dataset);
 			this->tabmain_train->Controls->Add(this->btn_tr_callFolderset);
 			this->tabmain_train->Controls->Add(this->label2);
-			this->tabmain_train->Controls->Add(this->textBox3);
+			this->tabmain_train->Controls->Add(this->tr_tb_nnName);
 			this->tabmain_train->Controls->Add(this->label1);
 			this->tabmain_train->Controls->Add(this->tabControl2);
 			this->tabmain_train->Location = System::Drawing::Point(4, 22);
 			this->tabmain_train->Name = L"tabmain_train";
 			this->tabmain_train->Padding = System::Windows::Forms::Padding(3);
-			this->tabmain_train->Size = System::Drawing::Size(692, 588);
+			this->tabmain_train->Size = System::Drawing::Size(696, 585);
 			this->tabmain_train->TabIndex = 1;
 			this->tabmain_train->Text = L"Apmācība";
 			this->tabmain_train->UseVisualStyleBackColor = true;
@@ -355,11 +411,11 @@ namespace DCGAN {
 			// 
 			this->statusStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(6) {
 				this->toolStripStatusLabel1,
-					this->toolStripStatusLabel2, this->toolStripStatusLabel3, this->toolStripStatusLabel4, this->toolStripStatusLabel5, this->toolStripProgressBar1
+					this->toolStripStatusLabel2, this->toolStripStatusLabel3, this->toolStripStatusLabel4, this->toolStripStatusLabel5, this->toolStripProgressBar
 			});
-			this->statusStrip1->Location = System::Drawing::Point(3, 362);
+			this->statusStrip1->Location = System::Drawing::Point(3, 357);
 			this->statusStrip1->Name = L"statusStrip1";
-			this->statusStrip1->Size = System::Drawing::Size(686, 22);
+			this->statusStrip1->Size = System::Drawing::Size(690, 24);
 			this->statusStrip1->SizingGrip = false;
 			this->statusStrip1->TabIndex = 0;
 			this->statusStrip1->Text = L"statusStrip1";
@@ -367,81 +423,87 @@ namespace DCGAN {
 			// 
 			// toolStripStatusLabel1
 			// 
-			this->toolStripStatusLabel1->BorderStyle = System::Windows::Forms::Border3DStyle::Sunken;
+			this->toolStripStatusLabel1->BorderSides = System::Windows::Forms::ToolStripStatusLabelBorderSides::Right;
+			this->toolStripStatusLabel1->BorderStyle = System::Windows::Forms::Border3DStyle::Bump;
 			this->toolStripStatusLabel1->Name = L"toolStripStatusLabel1";
-			this->toolStripStatusLabel1->Size = System::Drawing::Size(40, 17);
+			this->toolStripStatusLabel1->Size = System::Drawing::Size(44, 19);
 			this->toolStripStatusLabel1->Text = L"Epoha";
 			this->toolStripStatusLabel1->Click += gcnew System::EventHandler(this, &MyForm::toolStripStatusLabel1_Click);
 			// 
 			// toolStripStatusLabel2
 			// 
-			this->toolStripStatusLabel2->BorderStyle = System::Windows::Forms::Border3DStyle::Sunken;
+			this->toolStripStatusLabel2->BorderSides = System::Windows::Forms::ToolStripStatusLabelBorderSides::Right;
+			this->toolStripStatusLabel2->BorderStyle = System::Windows::Forms::Border3DStyle::Bump;
 			this->toolStripStatusLabel2->Name = L"toolStripStatusLabel2";
-			this->toolStripStatusLabel2->Size = System::Drawing::Size(48, 17);
+			this->toolStripStatusLabel2->Size = System::Drawing::Size(52, 19);
 			this->toolStripStatusLabel2->Text = L"Itēracija";
 			// 
 			// toolStripStatusLabel3
 			// 
-			this->toolStripStatusLabel3->BorderStyle = System::Windows::Forms::Border3DStyle::Sunken;
+			this->toolStripStatusLabel3->BorderSides = System::Windows::Forms::ToolStripStatusLabelBorderSides::Right;
+			this->toolStripStatusLabel3->BorderStyle = System::Windows::Forms::Border3DStyle::Bump;
 			this->toolStripStatusLabel3->Name = L"toolStripStatusLabel3";
-			this->toolStripStatusLabel3->Size = System::Drawing::Size(116, 17);
+			this->toolStripStatusLabel3->Size = System::Drawing::Size(120, 19);
 			this->toolStripStatusLabel3->Text = L"Diskriminatora kļūda";
 			// 
 			// toolStripStatusLabel4
 			// 
-			this->toolStripStatusLabel4->BorderStyle = System::Windows::Forms::Border3DStyle::Sunken;
+			this->toolStripStatusLabel4->BorderSides = System::Windows::Forms::ToolStripStatusLabelBorderSides::Right;
+			this->toolStripStatusLabel4->BorderStyle = System::Windows::Forms::Border3DStyle::Bump;
 			this->toolStripStatusLabel4->Name = L"toolStripStatusLabel4";
-			this->toolStripStatusLabel4->Size = System::Drawing::Size(97, 17);
+			this->toolStripStatusLabel4->Size = System::Drawing::Size(101, 19);
 			this->toolStripStatusLabel4->Text = L"Ģeneratora kļūda";
 			// 
 			// toolStripStatusLabel5
 			// 
-			this->toolStripStatusLabel5->BorderStyle = System::Windows::Forms::Border3DStyle::Sunken;
+			this->toolStripStatusLabel5->BorderSides = System::Windows::Forms::ToolStripStatusLabelBorderSides::Right;
+			this->toolStripStatusLabel5->BorderStyle = System::Windows::Forms::Border3DStyle::Bump;
 			this->toolStripStatusLabel5->Name = L"toolStripStatusLabel5";
-			this->toolStripStatusLabel5->Size = System::Drawing::Size(33, 17);
+			this->toolStripStatusLabel5->Size = System::Drawing::Size(37, 19);
 			this->toolStripStatusLabel5->Text = L"Laiks";
 			// 
-			// toolStripProgressBar1
+			// toolStripProgressBar
 			// 
-			this->toolStripProgressBar1->Margin = System::Windows::Forms::Padding(10, 3, 1, 3);
-			this->toolStripProgressBar1->Name = L"toolStripProgressBar1";
-			this->toolStripProgressBar1->Size = System::Drawing::Size(320, 16);
-			this->toolStripProgressBar1->Value = 10;
-			this->toolStripProgressBar1->Click += gcnew System::EventHandler(this, &MyForm::toolStripProgressBar1_Click);
+			this->toolStripProgressBar->Margin = System::Windows::Forms::Padding(10, 3, 1, 3);
+			this->toolStripProgressBar->Maximum = 0;
+			this->toolStripProgressBar->Name = L"toolStripProgressBar";
+			this->toolStripProgressBar->Size = System::Drawing::Size(320, 18);
+			this->toolStripProgressBar->Step = 1;
+			this->toolStripProgressBar->Click += gcnew System::EventHandler(this, &MyForm::toolStripProgressBar1_Click);
 			// 
-			// textBox11
+			// tr_tb_infobox
 			// 
-			this->textBox11->Dock = System::Windows::Forms::DockStyle::Bottom;
-			this->textBox11->Location = System::Drawing::Point(3, 384);
-			this->textBox11->Multiline = true;
-			this->textBox11->Name = L"textBox11";
-			this->textBox11->ReadOnly = true;
-			this->textBox11->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
-			this->textBox11->Size = System::Drawing::Size(686, 201);
-			this->textBox11->TabIndex = 17;
-			this->textBox11->Text = resources->GetString(L"textBox11.Text");
-			this->textBox11->TextChanged += gcnew System::EventHandler(this, &MyForm::textBox11_TextChanged);
+			this->tr_tb_infobox->Dock = System::Windows::Forms::DockStyle::Bottom;
+			this->tr_tb_infobox->Location = System::Drawing::Point(3, 381);
+			this->tr_tb_infobox->Multiline = true;
+			this->tr_tb_infobox->Name = L"tr_tb_infobox";
+			this->tr_tb_infobox->ReadOnly = true;
+			this->tr_tb_infobox->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
+			this->tr_tb_infobox->Size = System::Drawing::Size(690, 201);
+			this->tr_tb_infobox->TabIndex = 17;
+			this->tr_tb_infobox->TextChanged += gcnew System::EventHandler(this, &MyForm::textBox11_TextChanged);
 			// 
 			// btn_tr_startTraining
 			// 
-			this->btn_tr_startTraining->Location = System::Drawing::Point(137, 298);
+			this->btn_tr_startTraining->Location = System::Drawing::Point(136, 306);
 			this->btn_tr_startTraining->Name = L"btn_tr_startTraining";
 			this->btn_tr_startTraining->Size = System::Drawing::Size(101, 37);
 			this->btn_tr_startTraining->TabIndex = 16;
-			this->btn_tr_startTraining->Text = L"Apturēt apmācību";
+			this->btn_tr_startTraining->Text = L"Sākt apmācību";
 			this->btn_tr_startTraining->UseVisualStyleBackColor = true;
+			this->btn_tr_startTraining->Click += gcnew System::EventHandler(this, &MyForm::btn_tr_startTraining_Click);
 			// 
 			// groupBox1
 			// 
-			this->groupBox1->Controls->Add(this->textBox9);
+			this->groupBox1->Controls->Add(this->tr_tb_novirze);
 			this->groupBox1->Controls->Add(this->label7);
-			this->groupBox1->Controls->Add(this->textBox8);
+			this->groupBox1->Controls->Add(this->tr_tb_epohs);
 			this->groupBox1->Controls->Add(this->label6);
-			this->groupBox1->Controls->Add(this->textBox7);
+			this->groupBox1->Controls->Add(this->tr_tb_moments);
 			this->groupBox1->Controls->Add(this->label5);
-			this->groupBox1->Controls->Add(this->textBox6);
+			this->groupBox1->Controls->Add(this->tr_tb_learningR);
 			this->groupBox1->Controls->Add(this->label4);
-			this->groupBox1->Controls->Add(this->textBox5);
+			this->groupBox1->Controls->Add(this->tr_tb_batchS);
 			this->groupBox1->Controls->Add(this->label3);
 			this->groupBox1->Location = System::Drawing::Point(25, 130);
 			this->groupBox1->Name = L"groupBox1";
@@ -450,14 +512,13 @@ namespace DCGAN {
 			this->groupBox1->TabStop = false;
 			this->groupBox1->Text = L"Hiperparametri";
 			// 
-			// textBox9
+			// tr_tb_novirze
 			// 
-			this->textBox9->Enabled = false;
-			this->textBox9->Location = System::Drawing::Point(232, 122);
-			this->textBox9->Name = L"textBox9";
-			this->textBox9->Size = System::Drawing::Size(74, 20);
-			this->textBox9->TabIndex = 25;
-			this->textBox9->Text = L"0.2";
+			this->tr_tb_novirze->Location = System::Drawing::Point(232, 122);
+			this->tr_tb_novirze->Name = L"tr_tb_novirze";
+			this->tr_tb_novirze->Size = System::Drawing::Size(74, 20);
+			this->tr_tb_novirze->TabIndex = 25;
+			this->tr_tb_novirze->Text = L"0,2";
 			// 
 			// label7
 			// 
@@ -468,14 +529,13 @@ namespace DCGAN {
 			this->label7->TabIndex = 24;
 			this->label7->Text = L"Novirze";
 			// 
-			// textBox8
+			// tr_tb_epohs
 			// 
-			this->textBox8->Enabled = false;
-			this->textBox8->Location = System::Drawing::Point(20, 122);
-			this->textBox8->Name = L"textBox8";
-			this->textBox8->Size = System::Drawing::Size(74, 20);
-			this->textBox8->TabIndex = 23;
-			this->textBox8->Text = L"10";
+			this->tr_tb_epohs->Location = System::Drawing::Point(20, 122);
+			this->tr_tb_epohs->Name = L"tr_tb_epohs";
+			this->tr_tb_epohs->Size = System::Drawing::Size(74, 20);
+			this->tr_tb_epohs->TabIndex = 23;
+			this->tr_tb_epohs->Text = L"10";
 			// 
 			// label6
 			// 
@@ -486,14 +546,13 @@ namespace DCGAN {
 			this->label6->TabIndex = 22;
 			this->label6->Text = L"Epohu skaits";
 			// 
-			// textBox7
+			// tr_tb_moments
 			// 
-			this->textBox7->Enabled = false;
-			this->textBox7->Location = System::Drawing::Point(229, 54);
-			this->textBox7->Name = L"textBox7";
-			this->textBox7->Size = System::Drawing::Size(74, 20);
-			this->textBox7->TabIndex = 21;
-			this->textBox7->Text = L"0.5";
+			this->tr_tb_moments->Location = System::Drawing::Point(229, 54);
+			this->tr_tb_moments->Name = L"tr_tb_moments";
+			this->tr_tb_moments->Size = System::Drawing::Size(74, 20);
+			this->tr_tb_moments->TabIndex = 21;
+			this->tr_tb_moments->Text = L"0,5";
 			// 
 			// label5
 			// 
@@ -504,14 +563,13 @@ namespace DCGAN {
 			this->label5->TabIndex = 20;
 			this->label5->Text = L"Moments";
 			// 
-			// textBox6
+			// tr_tb_learningR
 			// 
-			this->textBox6->Enabled = false;
-			this->textBox6->Location = System::Drawing::Point(124, 87);
-			this->textBox6->Name = L"textBox6";
-			this->textBox6->Size = System::Drawing::Size(74, 20);
-			this->textBox6->TabIndex = 19;
-			this->textBox6->Text = L"0.002";
+			this->tr_tb_learningR->Location = System::Drawing::Point(124, 87);
+			this->tr_tb_learningR->Name = L"tr_tb_learningR";
+			this->tr_tb_learningR->Size = System::Drawing::Size(74, 20);
+			this->tr_tb_learningR->TabIndex = 19;
+			this->tr_tb_learningR->Text = L"0,002";
 			// 
 			// label4
 			// 
@@ -522,14 +580,13 @@ namespace DCGAN {
 			this->label4->TabIndex = 18;
 			this->label4->Text = L"Ātrums";
 			// 
-			// textBox5
+			// tr_tb_batchS
 			// 
-			this->textBox5->Enabled = false;
-			this->textBox5->Location = System::Drawing::Point(20, 54);
-			this->textBox5->Name = L"textBox5";
-			this->textBox5->Size = System::Drawing::Size(74, 20);
-			this->textBox5->TabIndex = 17;
-			this->textBox5->Text = L"128";
+			this->tr_tb_batchS->Location = System::Drawing::Point(20, 54);
+			this->tr_tb_batchS->Name = L"tr_tb_batchS";
+			this->tr_tb_batchS->Size = System::Drawing::Size(74, 20);
+			this->tr_tb_batchS->TabIndex = 17;
+			this->tr_tb_batchS->Text = L"128";
 			// 
 			// label3
 			// 
@@ -541,24 +598,22 @@ namespace DCGAN {
 			this->label3->Text = L"Pakas izmērs";
 			this->label3->Click += gcnew System::EventHandler(this, &MyForm::label3_Click);
 			// 
-			// textBox4
+			// tb_dataset
 			// 
-			this->textBox4->Enabled = false;
-			this->textBox4->Location = System::Drawing::Point(25, 97);
-			this->textBox4->Name = L"textBox4";
-			this->textBox4->Size = System::Drawing::Size(330, 20);
-			this->textBox4->TabIndex = 12;
-			this->textBox4->Text = L"D:\\data_sets\\cats";
+			this->tb_dataset->Location = System::Drawing::Point(25, 97);
+			this->tb_dataset->Name = L"tb_dataset";
+			this->tb_dataset->Size = System::Drawing::Size(330, 20);
+			this->tb_dataset->TabIndex = 12;
 			// 
 			// btn_tr_callFolderset
 			// 
-			this->btn_tr_callFolderset->Enabled = false;
 			this->btn_tr_callFolderset->Location = System::Drawing::Point(361, 97);
 			this->btn_tr_callFolderset->Name = L"btn_tr_callFolderset";
 			this->btn_tr_callFolderset->Size = System::Drawing::Size(26, 20);
 			this->btn_tr_callFolderset->TabIndex = 14;
 			this->btn_tr_callFolderset->Text = L"...";
 			this->btn_tr_callFolderset->UseVisualStyleBackColor = true;
+			this->btn_tr_callFolderset->Click += gcnew System::EventHandler(this, &MyForm::btn_tr_callFolderset_Click);
 			// 
 			// label2
 			// 
@@ -569,14 +624,12 @@ namespace DCGAN {
 			this->label2->TabIndex = 13;
 			this->label2->Text = L"Datu kopa direktorija";
 			// 
-			// textBox3
+			// tr_tb_nnName
 			// 
-			this->textBox3->Enabled = false;
-			this->textBox3->Location = System::Drawing::Point(25, 40);
-			this->textBox3->Name = L"textBox3";
-			this->textBox3->Size = System::Drawing::Size(330, 20);
-			this->textBox3->TabIndex = 2;
-			this->textBox3->Text = L"cats";
+			this->tr_tb_nnName->Location = System::Drawing::Point(25, 40);
+			this->tr_tb_nnName->Name = L"tr_tb_nnName";
+			this->tr_tb_nnName->Size = System::Drawing::Size(330, 20);
+			this->tr_tb_nnName->TabIndex = 2;
 			// 
 			// label1
 			// 
@@ -595,18 +648,18 @@ namespace DCGAN {
 			this->tabControl2->Location = System::Drawing::Point(402, 6);
 			this->tabControl2->Name = L"tabControl2";
 			this->tabControl2->SelectedIndex = 0;
-			this->tabControl2->Size = System::Drawing::Size(273, 341);
+			this->tabControl2->Size = System::Drawing::Size(291, 341);
 			this->tabControl2->TabIndex = 0;
 			// 
 			// tabImages
 			// 
 			this->tabImages->Controls->Add(this->label_tr_counter);
-			this->tabImages->Controls->Add(this->tableLayoutPanel1);
-			this->tabImages->Controls->Add(this->hScrollBar1);
+			this->tabImages->Controls->Add(this->tr_imageLayout);
+			this->tabImages->Controls->Add(this->tr_imagesScroll);
 			this->tabImages->Location = System::Drawing::Point(4, 22);
 			this->tabImages->Name = L"tabImages";
 			this->tabImages->Padding = System::Windows::Forms::Padding(3);
-			this->tabImages->Size = System::Drawing::Size(265, 315);
+			this->tabImages->Size = System::Drawing::Size(283, 315);
 			this->tabImages->TabIndex = 1;
 			this->tabImages->Text = L"Attēli";
 			this->tabImages->UseVisualStyleBackColor = true;
@@ -618,62 +671,62 @@ namespace DCGAN {
 			this->label_tr_counter->Name = L"label_tr_counter";
 			this->label_tr_counter->Size = System::Drawing::Size(50, 13);
 			this->label_tr_counter->TabIndex = 28;
-			this->label_tr_counter->Text = L"Epoha: 1";
+			this->label_tr_counter->Text = L"Epoha: 0";
+			this->label_tr_counter->Visible = false;
 			// 
-			// tableLayoutPanel1
+			// tr_imageLayout
 			// 
-			this->tableLayoutPanel1->CellBorderStyle = System::Windows::Forms::TableLayoutPanelCellBorderStyle::Single;
-			this->tableLayoutPanel1->ColumnCount = 4;
-			this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute,
+			this->tr_imageLayout->CellBorderStyle = System::Windows::Forms::TableLayoutPanelCellBorderStyle::Single;
+			this->tr_imageLayout->ColumnCount = 4;
+			this->tr_imageLayout->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute,
 				64)));
-			this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute,
+			this->tr_imageLayout->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute,
 				64)));
-			this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute,
+			this->tr_imageLayout->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute,
 				64)));
-			this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute,
-				71)));
-			this->tableLayoutPanel1->Location = System::Drawing::Point(0, 0);
-			this->tableLayoutPanel1->Name = L"tableLayoutPanel1";
-			this->tableLayoutPanel1->RowCount = 4;
-			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 64)));
-			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 64)));
-			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 64)));
-			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 64)));
-			this->tableLayoutPanel1->Size = System::Drawing::Size(262, 256);
-			this->tableLayoutPanel1->TabIndex = 0;
-			this->tableLayoutPanel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MyForm::tableLayoutPanel1_Paint);
+			this->tr_imageLayout->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute,
+				76)));
+			this->tr_imageLayout->Location = System::Drawing::Point(10, 5);
+			this->tr_imageLayout->Name = L"tr_imageLayout";
+			this->tr_imageLayout->RowCount = 4;
+			this->tr_imageLayout->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 64)));
+			this->tr_imageLayout->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 64)));
+			this->tr_imageLayout->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 64)));
+			this->tr_imageLayout->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 64)));
+			this->tr_imageLayout->Size = System::Drawing::Size(262, 256);
+			this->tr_imageLayout->TabIndex = 0;
+			this->tr_imageLayout->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MyForm::tableLayoutPanel1_Paint);
 			// 
-			// hScrollBar1
+			// tr_imagesScroll
 			// 
-			this->hScrollBar1->LargeChange = 1;
-			this->hScrollBar1->Location = System::Drawing::Point(6, 289);
-			this->hScrollBar1->Maximum = 2;
-			this->hScrollBar1->Minimum = 1;
-			this->hScrollBar1->Name = L"hScrollBar1";
-			this->hScrollBar1->Size = System::Drawing::Size(249, 18);
-			this->hScrollBar1->TabIndex = 16;
-			this->hScrollBar1->Value = 2;
+			this->tr_imagesScroll->Enabled = false;
+			this->tr_imagesScroll->LargeChange = 1;
+			this->tr_imagesScroll->Location = System::Drawing::Point(6, 289);
+			this->tr_imagesScroll->Maximum = 0;
+			this->tr_imagesScroll->Name = L"tr_imagesScroll";
+			this->tr_imagesScroll->Size = System::Drawing::Size(266, 18);
+			this->tr_imagesScroll->TabIndex = 16;
 			// 
 			// tabDiagram
 			// 
-			this->tabDiagram->Controls->Add(this->chart1);
+			this->tabDiagram->Controls->Add(this->chart);
 			this->tabDiagram->Location = System::Drawing::Point(4, 22);
 			this->tabDiagram->Name = L"tabDiagram";
 			this->tabDiagram->Padding = System::Windows::Forms::Padding(3);
-			this->tabDiagram->Size = System::Drawing::Size(265, 315);
+			this->tabDiagram->Size = System::Drawing::Size(283, 315);
 			this->tabDiagram->TabIndex = 2;
 			this->tabDiagram->Text = L"Diagramma";
 			this->tabDiagram->UseVisualStyleBackColor = true;
 			// 
-			// chart1
+			// chart
 			// 
 			chartArea1->Name = L"ChartArea1";
-			this->chart1->ChartAreas->Add(chartArea1);
+			this->chart->ChartAreas->Add(chartArea1);
 			legend1->Docking = System::Windows::Forms::DataVisualization::Charting::Docking::Top;
 			legend1->Name = L"Legend1";
-			this->chart1->Legends->Add(legend1);
-			this->chart1->Location = System::Drawing::Point(0, 0);
-			this->chart1->Name = L"chart1";
+			this->chart->Legends->Add(legend1);
+			this->chart->Location = System::Drawing::Point(0, 0);
+			this->chart->Name = L"chart";
 			series1->BorderWidth = 3;
 			series1->ChartArea = L"ChartArea1";
 			series1->Color = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
@@ -685,21 +738,33 @@ namespace DCGAN {
 			series2->Color = System::Drawing::Color::Red;
 			series2->Legend = L"Legend1";
 			series2->Name = L"L(G)";
-			this->chart1->Series->Add(series1);
-			this->chart1->Series->Add(series2);
-			this->chart1->Size = System::Drawing::Size(256, 315);
-			this->chart1->TabIndex = 17;
-			this->chart1->Text = L"chart1";
-			this->chart1->Click += gcnew System::EventHandler(this, &MyForm::chart1_Click);
+			this->chart->Series->Add(series1);
+			this->chart->Series->Add(series2);
+			this->chart->Size = System::Drawing::Size(283, 315);
+			this->chart->TabIndex = 17;
+			this->chart->Text = L"chart1";
+			this->chart->Click += gcnew System::EventHandler(this, &MyForm::chart1_Click);
+			// 
+			// generateImageBWorker
+			// 
+			this->generateImageBWorker->DoWork += gcnew System::ComponentModel::DoWorkEventHandler(this, &MyForm::generateImageBWorker_DoWork);
+			this->generateImageBWorker->RunWorkerCompleted += gcnew System::ComponentModel::RunWorkerCompletedEventHandler(this, &MyForm::generateImageBWorker_RunWorkerCompleted);
+			// 
+			// trainingBWorker
+			// 
+			this->trainingBWorker->DoWork += gcnew System::ComponentModel::DoWorkEventHandler(this, &MyForm::trainingBWorker_DoWork);
+			this->trainingBWorker->RunWorkerCompleted += gcnew System::ComponentModel::RunWorkerCompletedEventHandler(this, &MyForm::trainingBWorker_RunWorkerCompleted);
 			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(700, 614);
+			this->ClientSize = System::Drawing::Size(704, 611);
 			this->Controls->Add(this->tabControl1);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
+			this->MaximumSize = System::Drawing::Size(720, 650);
+			this->MinimumSize = System::Drawing::Size(420, 340);
 			this->Name = L"MyForm";
 			this->Text = L"DCGAN";
 			this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
@@ -716,12 +781,23 @@ namespace DCGAN {
 			this->tabImages->ResumeLayout(false);
 			this->tabImages->PerformLayout();
 			this->tabDiagram->ResumeLayout(false);
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart1))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart))->EndInit();
 			this->ResumeLayout(false);
 
 		}
 #pragma endregion
 	private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) {
+		std::wstring tempwpath = getDocPath() + L"\\DCGAN";
+String^ pathString = gcnew String(tempwpath.c_str());
+std::string path = msclr::interop::marshal_as<std::string>(pathString);
+struct stat sb;
+if (stat(path.c_str(), &sb) != 0) {
+	_wmkdir(tempwpath.c_str());
+	tempwpath += L"\\weights";
+	_wmkdir(tempwpath.c_str());
+	String^ pathString = gcnew String(path.c_str());
+	this->label_g_info->Text = pathString;
+}
 	}
 	private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
 	}
@@ -736,8 +812,6 @@ private: System::Void tabPage1_Click(System::Object^ sender, System::EventArgs^ 
 
 
 private: System::Void chart1_Click(System::Object^ sender, System::EventArgs^ e) {
-	this->chart1->Series[0]->Points->AddXY(1, 5.321);
-	this->chart1->Series[1]->Points->AddXY(1, 10.345);
 }
 private: System::Void textBox11_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 }
@@ -754,6 +828,15 @@ private: System::Void tableLayoutPanel1_Paint(System::Object^ sender, System::Wi
 private: System::Void statusStrip1_ItemClicked(System::Object^ sender, System::Windows::Forms::ToolStripItemClickedEventArgs^ e) {
 }
 
+private:System::Void tabControl1_SelectedIndexChanged(Object^ sender, EventArgs^ e) {
+	if (this->tabControl1->SelectedIndex == 0) {
+		this->Size = System::Drawing::Size(420, 340);
+	}
+	else if (this->tabControl1->SelectedIndex == 1) {
+		this->Size = System::Drawing::Size(720, 650);
+	}
+}
+
 private: System::Void btn_g_callFolderset_Click(System::Object^ sender, System::EventArgs^ e) {
 	FolderBrowserDialog^ openFileDialog1 = gcnew FolderBrowserDialog;
 
@@ -762,5 +845,275 @@ private: System::Void btn_g_callFolderset_Click(System::Object^ sender, System::
 		tb_saveFolder->Text = openFileDialog1->SelectedPath;
 	}
 }
+private: System::Void btn_tr_callFolderset_Click(System::Object^ sender, System::EventArgs^ e) {
+	FolderBrowserDialog^ openFileDialog1 = gcnew FolderBrowserDialog;
+
+	if (openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+	{
+		tb_dataset->Text = openFileDialog1->SelectedPath;
+	}
+}
+private: System::Void cb_setNN_Click(System::Object^ sender, System::EventArgs^ e) {
+	this->cb_setNN->Items->Clear();
+	std::wstring wpath = getDocPath() + L"\\DCGAN\\weights";
+	for (const auto& entry : std::filesystem::directory_iterator(wpath)) {
+
+		std::string filename = entry.path().string().substr(entry.path().string().find_last_of("/\\") + 1);
+
+		std::string name = filename.substr(0, filename.find("."));
+		String^ pathString = gcnew String(name.c_str());
+		this->cb_setNN->Items->Add(pathString);
+	}
+}
+
+private: System::Void btn_generate_Click(System::Object^ sender, System::EventArgs^ e) {
+	label_g_info->Visible = true;
+	cb_setNN->Enabled = false;
+	tb_saveFolder->Enabled = false;
+	btn_g_callFolderset->Enabled = false;
+	cb_chooseFileFormat->Enabled = false;
+	tb_setNumImages->Enabled = false;
+	btn_generate->Enabled = false;
+	label_g_info->Text = L"Generācija ir sākusies";
+	Application::DoEvents();
+
+	String^ sys_gName = cb_setNN->SelectedItem->ToString();
+	String^ sys_saveImagePath = tb_saveFolder->Text;
+	String^ sys_imageFormat = cb_chooseFileFormat->SelectedItem->ToString();
+	String^ sys_imageNum = tb_setNumImages->Text;
+	
+	generateImageBWorker->RunWorkerAsync(Tuple::Create(sys_gName, sys_imageFormat, sys_saveImagePath, sys_imageNum));
+	//System::Threading::Thread^ generateImageThread = gcnew System::Threading::Thread(gcnew System::Threading::ParameterizedThreadStart(this, &MyForm::generateImage)); 
+	//generateImageThread->Start(Tuple::Create(sys_gName, sys_imageFormat, sys_saveImagePath, sys_imageNum));
+	//generateImageThread->Join();
+}
+
+private: System::Void generateImageBWorker_DoWork(System::Object^ sender, System::ComponentModel::DoWorkEventArgs^ e) {
+	using namespace WrapperCLI;
+	auto args = safe_cast<Tuple<String^, String^, String^, String^>^>(e->Argument);
+	String^ sys_gName = args->Item1;
+	String^ sys_imageFormat = args->Item2;
+	String^ sys_saveImagePath = args->Item3;
+	String^ sys_imageNum = args->Item4;
+	std::wstring saveImagePath = msclr::interop::marshal_as<std::wstring>(sys_saveImagePath);
+	int imageNum = (int)System::Int32::Parse(sys_imageNum);
+	WrapperCLI::NeuralNetworkCLI::Generator_CLI^ G = gcnew WrapperCLI::NeuralNetworkCLI::Generator_CLI(sys_gName);
+	G->loadAllWeights();
+	Tensor::Tensor3d_CLI<double>^ iX = gcnew Tensor::Tensor3d_CLI<double>(1, 1, 100);
+	for (size_t i = 0; i < imageNum; i++)
+	{
+		for (size_t j = 0; j < 100; j++) {
+			iX(0, 0, j) = NeuralNetwork::normalDistribution(0, 1);
+		}
+		G->forward(*iX);
+		ImageProcessing::normalizeImageValues(G->getNeurons(), -1, 1, 0, 255);
+		if (sys_imageFormat == "JPG") {
+			std::wstring filename = saveImagePath + L"\\" + std::to_wstring(i + 1) + L".jpg";
+			ImageProcessing::save_jpg_image(G->getNeurons(), filename);
+		}
+		else if (sys_imageFormat == "BMP") {
+			std::wstring filename = saveImagePath + L"\\" + std::to_wstring(i + 1) + L".bmp";
+			ImageProcessing::save_bmp_image(G->getNeurons(), filename);
+		}
+		else if (sys_imageFormat == "PNG") {
+			std::wstring filename = saveImagePath + L"\\" + std::to_wstring(i + 1) + L".png";
+			ImageProcessing::save_png_image(G->getNeurons(), filename);
+		}
+	}
+	delete iX;
+	delete G;
+}
+private: System::Void generateImageBWorker_RunWorkerCompleted(System::Object^ sender, System::ComponentModel::RunWorkerCompletedEventArgs^ e) {
+	cb_setNN->Enabled = true;
+	tb_saveFolder->Enabled = true;
+	btn_g_callFolderset->Enabled = true;
+	cb_chooseFileFormat->Enabled = true;
+	tb_setNumImages->Enabled = true;
+	btn_generate->Enabled = true;
+	label_g_info->Text = L"Attēli ir ģenerēti!";
+}
+private: bool is_training = false;
+private: System::Void btn_tr_startTraining_Click(System::Object^ sender, System::EventArgs^ e) {
+
+	if (!is_training) {
+		is_training = true;
+
+		tr_tb_nnName->Enabled = false;
+		tb_dataset->Enabled = false;
+		btn_tr_callFolderset->Enabled = false;
+
+		tr_tb_learningR->Enabled = false;
+		tr_tb_batchS->Enabled = false;
+		tr_tb_epohs->Enabled = false;
+		tr_tb_moments->Enabled = false;
+		tr_tb_novirze->Enabled = false;
+
+		btn_tr_startTraining->Text = L"Apturēt apmācību";
+		tr_tb_infobox->Text += L"<Neironu tīkla apmācības procesa uzsākšana>\r\n";
+		Application::DoEvents();
+
+		String^ sys_gName = tr_tb_nnName->Text;
+		String^ sys_dataSet = tb_dataset->Text;
+		String^ sys_batchSize = tr_tb_batchS->Text;
+		String^ sys_epohs = tr_tb_epohs->Text;
+		String^ sys_learningRate = tr_tb_learningR->Text;
+		String^ sys_moments = tr_tb_moments->Text;
+		String^ sys_novirze = tr_tb_novirze->Text;
+
+		trainingBWorker->RunWorkerAsync(Tuple::Create(sys_gName, sys_dataSet, sys_batchSize, sys_epohs, sys_learningRate, sys_moments, sys_novirze));
+
+	}
+	else {
+		is_training = false;
+		btn_tr_startTraining->Enabled = false;
+	}
+}
+private: delegate void delegateAddStringInfoBox(String^ string);
+private: delegate void delegateSetProgressBar(int size);
+private: delegate void delegateUpdateProgressBar();
+private: delegate void delegateUpdateDiagram(int i, double d, double g);
+
+private: delegateAddStringInfoBox^ myDelegateAddString;
+private: delegateSetProgressBar^ myDelegateSetProgressBar;
+private: delegateUpdateProgressBar^ myDelegateUpdateProgressBar;
+private: delegateUpdateDiagram^ myDelegateUpdateDiagram;
+
+private: void addStringInfoBox(String^ string) {
+	tr_tb_infobox->Text += string;
+}
+private: void setProgressBar(int size) {
+	toolStripProgressBar->Value = 0;
+	toolStripProgressBar->Maximum = size;
+}
+private: void UpdateProgressBar() {
+	toolStripProgressBar->PerformStep();
+}
+private: void UpdateDiagram(int i, double d, double g) {
+	this->chart->Series[0]->Points->AddXY(i, d);
+	this->chart->Series[1]->Points->AddXY(i, g);
+}
+private: System::Void trainingBWorker_DoWork(System::Object^ sender, System::ComponentModel::DoWorkEventArgs^ e) 
+{
+	using namespace WrapperCLI;
+	//Threading::Thread::CurrentThread->CurrentCulture = gcnew Globalization::CultureInfo("en-US", false);
+	//Globalization::NumberFormatInfo^ nfi = Globalization::CultureInfo::CurrentCulture->NumberFormat;
+	auto args = safe_cast<Tuple<String^, String^, String^, String^, String^, String^, String^>^>(e->Argument);
+	String^ sys_gName = args->Item1;
+	String^ sys_dataSet = args->Item2;
+	String^ sys_batchSize = args->Item3;
+	String^ sys_epohs = args->Item4;
+	String^ sys_learningRate = args->Item5;
+	String^ sys_moments = args->Item6;
+	String^ sys_novirze = args->Item7;
+
+	int batchsize = (int)System::Int32::Parse(sys_batchSize);
+	int epohs = (int)System::Int32::Parse(sys_epohs);
+	double learning_rate = Convert::ToDouble(sys_learningRate);
+	double momentum = Convert::ToDouble(sys_moments);
+	double novirze = Convert::ToDouble(sys_novirze);
+
+	myDelegateAddString = gcnew delegateAddStringInfoBox(this, &MyForm::addStringInfoBox);
+	MyForm::Invoke(myDelegateAddString, L"<Diskriminatora inicializācija>\r\n");
+	NeuralNetworkCLI::Discriminator_CLI^ D = gcnew NeuralNetworkCLI::Discriminator_CLI(sys_gName, batchsize, learning_rate, momentum, novirze);
+	MyForm::Invoke(myDelegateAddString, L"<Ģeneratora inicializācija>\r\n");
+	NeuralNetworkCLI::Generator_CLI^ G = gcnew NeuralNetworkCLI::Generator_CLI(sys_gName, batchsize, learning_rate, momentum, novirze);
+
+	G->setPointerToDiscriminator(*D);
+
+	Tensor::Tensor3d_CLI<double>^ X = gcnew Tensor::Tensor3d_CLI<double>;
+
+	array <String^>^ fileEntries = System::IO::Directory::GetFiles(sys_dataSet);
+	size_t dataset_size = fileEntries->Length;
+	Random^ rand = gcnew Random;
+	
+	MyForm::Invoke(myDelegateAddString, L"<Visi sagatavošanās darbi ir pabeigti, apmācība sākas>\r\n\r\n");
+	int iterations = (int)(dataset_size / batchsize);
+	int allsize = epohs * iterations;
+	myDelegateSetProgressBar = gcnew delegateSetProgressBar(this, &MyForm::setProgressBar);
+	myDelegateUpdateProgressBar = gcnew delegateUpdateProgressBar(this, &MyForm::UpdateProgressBar);
+	myDelegateUpdateDiagram = gcnew delegateUpdateDiagram(this, &MyForm::UpdateDiagram);
+	MyForm::Invoke(myDelegateSetProgressBar, allsize);
+	setTimer::Timer_CLI^ timer = gcnew setTimer::Timer_CLI;
+	timer->setTimer();
+	for (size_t ep = 0; ep < epohs; ep++) {
+		for (size_t i = 0; i < iterations; i++) {
+			if (is_training) {
+				for (size_t b = 0; b < batchsize; b++) {
+					String^ filename = fileEntries[rand->Next(dataset_size)];
+					ImageProcessingCLI::getImageValues(*X, filename);
+					ImageProcessing::normalizeImageValues(X->getTensor3d());
+
+					D->forward(*X);
+					D->backward();
+
+					*X = Tensor::Tensor3d_CLI<double>(1, 1, 100);
+
+					for (size_t j = 0; j < 100; j++) {
+						X(0, 0, j) = NeuralNetwork::normalDistribution(0, 1);
+					}
+
+					G->forward(*X);
+
+					X->getTensor3d() = G->getNeurons();
+
+					D->forward(*X);
+					D->backward();
+
+					D->clearOutputs();
+				}
+				D->countBatchError();
+				G->countBatchError();
+				
+				D->updateAllParameters();
+				String^ str_ep = Convert::ToString(ep+1);
+				String^ str_epohs = Convert::ToString(epohs);
+				String^ str_i = Convert::ToString(i+1);
+				String^ str_iterat = Convert::ToString(iterations);
+				String^ str_D_error = Convert::ToString(String::Format("{0:F4}", D->getError()));
+				String^ str_G_error = Convert::ToString(String::Format("{0:F4}", G->getError()));
+				//String^ time = String::Format("{0}m:{1}s:{2}ms", timer->getTime().count() / 60000, (timer->getTime().count() % 60000) / 1000, timer->getTime().count() % 1000);
+				auto t_hours = std::chrono::duration_cast<std::chrono::hours>(timer->getTime()).count();
+				auto t_min = std::chrono::duration_cast<std::chrono::minutes>(timer->getTime() % std::chrono::hours(1)).count();
+				auto t_seconds = std::chrono::duration_cast<std::chrono::seconds>(timer->getTime() % std::chrono::minutes(1)).count();
+				String^ time = String::Format("{0}h:{1}m:{2}s", t_hours, t_min, t_seconds);
+				
+				String^ str_out = String::Format("  [{0}/{1}]\t[{2}/{3}]\t\t{4}\t\t{5}\t\t{6}\r\n", str_ep, str_epohs, str_i, str_iterat, str_D_error, str_G_error, time);
+				MyForm::Invoke(myDelegateAddString, str_out);
+				
+			}
+			else {
+				break;
+			}
+			MyForm::Invoke(myDelegateUpdateProgressBar);
+			
+			MyForm::Invoke(myDelegateUpdateDiagram, (int)i, D->getError(), G->getError());
+		}
+	}
+
+	MyForm::Invoke(myDelegateSetProgressBar, 0);
+	MyForm::Invoke(myDelegateAddString, L"\r\n<Parametru vērtību saglabāšana failā>");
+	NeuralNetworkCLI::saveAllWeights(*D, *G);
+	MyForm::Invoke(myDelegateAddString, L"\r\n<Parametru saglabāšana failā ir pabeigta!>");
+	
+	delete D;
+	delete G;
+	delete X;
+}
+private: System::Void trainingBWorker_RunWorkerCompleted(System::Object^ sender, System::ComponentModel::RunWorkerCompletedEventArgs^ e) {
+	tr_tb_nnName->Enabled = true;
+	tb_dataset->Enabled = true;
+	btn_tr_callFolderset->Enabled = true;
+
+	tr_tb_learningR->Enabled = true;
+	tr_tb_batchS->Enabled = true;
+	tr_tb_epohs->Enabled = true;
+	tr_tb_moments->Enabled = true;
+	tr_tb_novirze->Enabled = true;
+
+	btn_tr_startTraining->Enabled = true;
+	btn_tr_startTraining->Text = L"Sākt apmācību";
+	Application::DoEvents();
+}
+
 };
 }

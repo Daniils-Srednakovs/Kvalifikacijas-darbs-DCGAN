@@ -78,16 +78,13 @@ public:
 
     void interweave()
     {
-        Tensor3d<double> nX(x * 2, y * 2, z);
+        Tensor3d<double> nX(x * 2 - 1, y * 2 - 1, z);
         nX.fill();
 
         for (size_t i = 0; i < x; ++i) {
             for (size_t j = 0; j < y; ++j) {
                 for (size_t k = 0; k < z; ++k) {
                     nX(i * 2, j * 2, k) = this->tv[i][j][k];
-                    nX(i * 2 + 1, j * 2, k) = 0;
-                    nX(i * 2, j * 2 + 1, k) = 0;
-                    nX(i * 2 + 1, j * 2 + 1, k) = 0;
                 }
             }
         }
@@ -165,6 +162,22 @@ public:
                 std::cout << std::endl;
             }
         }
+    }
+
+    void rotate180()
+    {
+        Tensor3d<double> ntv(x, y, z);
+        for (size_t i = 0; i < x; i++) {
+            for (size_t j = 0; j < y; j++) {
+                for (size_t k = 0; k < z; k++) {
+                    
+                    ntv(i, j, k) = this->tv[x - 1 - i][y - 1 - j][z - 1 - k];
+                    
+                }
+            }
+        }
+
+        *this = ntv;
     }
 };
 

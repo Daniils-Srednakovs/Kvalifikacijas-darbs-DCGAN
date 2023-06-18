@@ -33,6 +33,7 @@ namespace DCGAN {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace WrapperCLI;
 
 	/// <summary>
 	/// Сводка для MyForm
@@ -112,7 +113,7 @@ namespace DCGAN {
 	private: System::Windows::Forms::Label^ label1;
 	private: System::Windows::Forms::TabControl^ tabControl2;
 	private: System::Windows::Forms::TabPage^ tabImages;
-	private: System::Windows::Forms::TableLayoutPanel^ tr_imageLayout;
+
 
 
 	private: System::Windows::Forms::TabPage^ tabDiagram;
@@ -141,6 +142,27 @@ namespace DCGAN {
 	private: System::Windows::Forms::Label^ label_tr_counter;
 	private: System::ComponentModel::BackgroundWorker^ generateImageBWorker;
 	private: System::ComponentModel::BackgroundWorker^ trainingBWorker;
+private: System::Windows::Forms::TableLayoutPanel^ tr_imageLayout;
+private: System::Windows::Forms::PictureBox^ pictureBox16;
+private: System::Windows::Forms::PictureBox^ pictureBox15;
+private: System::Windows::Forms::PictureBox^ pictureBox14;
+private: System::Windows::Forms::PictureBox^ pictureBox13;
+private: System::Windows::Forms::PictureBox^ pictureBox12;
+private: System::Windows::Forms::PictureBox^ pictureBox11;
+private: System::Windows::Forms::PictureBox^ pictureBox10;
+private: System::Windows::Forms::PictureBox^ pictureBox9;
+private: System::Windows::Forms::PictureBox^ pictureBox8;
+private: System::Windows::Forms::PictureBox^ pictureBox7;
+private: System::Windows::Forms::PictureBox^ pictureBox6;
+private: System::Windows::Forms::PictureBox^ pictureBox5;
+private: System::Windows::Forms::PictureBox^ pictureBox4;
+private: System::Windows::Forms::PictureBox^ pictureBox3;
+private: System::Windows::Forms::PictureBox^ pictureBox2;
+private: System::Windows::Forms::PictureBox^ pictureBox1;
+private: System::ComponentModel::BackgroundWorker^ imageWorker;
+
+
+private: System::ComponentModel::IContainer^ components;
 
 
 
@@ -175,7 +197,7 @@ namespace DCGAN {
 		/// <summary>
 		/// Обязательная переменная конструктора.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -232,11 +254,28 @@ namespace DCGAN {
 			this->tabImages = (gcnew System::Windows::Forms::TabPage());
 			this->label_tr_counter = (gcnew System::Windows::Forms::Label());
 			this->tr_imageLayout = (gcnew System::Windows::Forms::TableLayoutPanel());
+			this->pictureBox16 = (gcnew System::Windows::Forms::PictureBox());
+			this->pictureBox15 = (gcnew System::Windows::Forms::PictureBox());
+			this->pictureBox14 = (gcnew System::Windows::Forms::PictureBox());
+			this->pictureBox13 = (gcnew System::Windows::Forms::PictureBox());
+			this->pictureBox12 = (gcnew System::Windows::Forms::PictureBox());
+			this->pictureBox11 = (gcnew System::Windows::Forms::PictureBox());
+			this->pictureBox10 = (gcnew System::Windows::Forms::PictureBox());
+			this->pictureBox9 = (gcnew System::Windows::Forms::PictureBox());
+			this->pictureBox8 = (gcnew System::Windows::Forms::PictureBox());
+			this->pictureBox7 = (gcnew System::Windows::Forms::PictureBox());
+			this->pictureBox6 = (gcnew System::Windows::Forms::PictureBox());
+			this->pictureBox5 = (gcnew System::Windows::Forms::PictureBox());
+			this->pictureBox4 = (gcnew System::Windows::Forms::PictureBox());
+			this->pictureBox3 = (gcnew System::Windows::Forms::PictureBox());
+			this->pictureBox2 = (gcnew System::Windows::Forms::PictureBox());
+			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
 			this->tr_imagesScroll = (gcnew System::Windows::Forms::HScrollBar());
 			this->tabDiagram = (gcnew System::Windows::Forms::TabPage());
 			this->chart = (gcnew System::Windows::Forms::DataVisualization::Charting::Chart());
 			this->generateImageBWorker = (gcnew System::ComponentModel::BackgroundWorker());
 			this->trainingBWorker = (gcnew System::ComponentModel::BackgroundWorker());
+			this->imageWorker = (gcnew System::ComponentModel::BackgroundWorker());
 			this->tabControl1->SuspendLayout();
 			this->tabmain_generate->SuspendLayout();
 			this->tabmain_train->SuspendLayout();
@@ -244,6 +283,23 @@ namespace DCGAN {
 			this->groupBox1->SuspendLayout();
 			this->tabControl2->SuspendLayout();
 			this->tabImages->SuspendLayout();
+			this->tr_imageLayout->SuspendLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox16))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox15))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox14))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox13))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox12))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox11))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox10))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox9))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox8))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox7))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox6))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox5))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox4))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox3))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			this->tabDiagram->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart))->BeginInit();
 			this->SuspendLayout();
@@ -361,7 +417,7 @@ namespace DCGAN {
 			this->tabControl1->MinimumSize = System::Drawing::Size(430, 330);
 			this->tabControl1->Name = L"tabControl1";
 			this->tabControl1->SelectedIndex = 0;
-			this->tabControl1->Size = System::Drawing::Size(704, 611);
+			this->tabControl1->Size = System::Drawing::Size(430, 330);
 			this->tabControl1->TabIndex = 12;
 			this->tabControl1->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm::tabControl1_SelectedIndexChanged);
 			// 
@@ -381,7 +437,7 @@ namespace DCGAN {
 			this->tabmain_generate->Location = System::Drawing::Point(4, 22);
 			this->tabmain_generate->Name = L"tabmain_generate";
 			this->tabmain_generate->Padding = System::Windows::Forms::Padding(3);
-			this->tabmain_generate->Size = System::Drawing::Size(696, 585);
+			this->tabmain_generate->Size = System::Drawing::Size(422, 304);
 			this->tabmain_generate->TabIndex = 0;
 			this->tabmain_generate->Text = L"Ģenerators";
 			this->tabmain_generate->UseVisualStyleBackColor = true;
@@ -402,7 +458,7 @@ namespace DCGAN {
 			this->tabmain_train->Location = System::Drawing::Point(4, 22);
 			this->tabmain_train->Name = L"tabmain_train";
 			this->tabmain_train->Padding = System::Windows::Forms::Padding(3);
-			this->tabmain_train->Size = System::Drawing::Size(696, 585);
+			this->tabmain_train->Size = System::Drawing::Size(422, 304);
 			this->tabmain_train->TabIndex = 1;
 			this->tabmain_train->Text = L"Apmācība";
 			this->tabmain_train->UseVisualStyleBackColor = true;
@@ -413,9 +469,9 @@ namespace DCGAN {
 				this->toolStripStatusLabel1,
 					this->toolStripStatusLabel2, this->toolStripStatusLabel3, this->toolStripStatusLabel4, this->toolStripStatusLabel5, this->toolStripProgressBar
 			});
-			this->statusStrip1->Location = System::Drawing::Point(3, 357);
+			this->statusStrip1->Location = System::Drawing::Point(3, 76);
 			this->statusStrip1->Name = L"statusStrip1";
-			this->statusStrip1->Size = System::Drawing::Size(690, 24);
+			this->statusStrip1->Size = System::Drawing::Size(416, 24);
 			this->statusStrip1->SizingGrip = false;
 			this->statusStrip1->TabIndex = 0;
 			this->statusStrip1->Text = L"statusStrip1";
@@ -474,12 +530,12 @@ namespace DCGAN {
 			// tr_tb_infobox
 			// 
 			this->tr_tb_infobox->Dock = System::Windows::Forms::DockStyle::Bottom;
-			this->tr_tb_infobox->Location = System::Drawing::Point(3, 381);
+			this->tr_tb_infobox->Location = System::Drawing::Point(3, 100);
 			this->tr_tb_infobox->Multiline = true;
 			this->tr_tb_infobox->Name = L"tr_tb_infobox";
 			this->tr_tb_infobox->ReadOnly = true;
 			this->tr_tb_infobox->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
-			this->tr_tb_infobox->Size = System::Drawing::Size(690, 201);
+			this->tr_tb_infobox->Size = System::Drawing::Size(416, 201);
 			this->tr_tb_infobox->TabIndex = 17;
 			this->tr_tb_infobox->TextChanged += gcnew System::EventHandler(this, &MyForm::textBox11_TextChanged);
 			// 
@@ -685,7 +741,23 @@ namespace DCGAN {
 			this->tr_imageLayout->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute,
 				64)));
 			this->tr_imageLayout->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute,
-				76)));
+				85)));
+			this->tr_imageLayout->Controls->Add(this->pictureBox16, 3, 3);
+			this->tr_imageLayout->Controls->Add(this->pictureBox15, 2, 3);
+			this->tr_imageLayout->Controls->Add(this->pictureBox14, 1, 3);
+			this->tr_imageLayout->Controls->Add(this->pictureBox13, 0, 3);
+			this->tr_imageLayout->Controls->Add(this->pictureBox12, 3, 2);
+			this->tr_imageLayout->Controls->Add(this->pictureBox11, 2, 2);
+			this->tr_imageLayout->Controls->Add(this->pictureBox10, 1, 2);
+			this->tr_imageLayout->Controls->Add(this->pictureBox9, 0, 2);
+			this->tr_imageLayout->Controls->Add(this->pictureBox8, 3, 1);
+			this->tr_imageLayout->Controls->Add(this->pictureBox7, 2, 1);
+			this->tr_imageLayout->Controls->Add(this->pictureBox6, 1, 1);
+			this->tr_imageLayout->Controls->Add(this->pictureBox5, 0, 1);
+			this->tr_imageLayout->Controls->Add(this->pictureBox4, 3, 0);
+			this->tr_imageLayout->Controls->Add(this->pictureBox3, 2, 0);
+			this->tr_imageLayout->Controls->Add(this->pictureBox2, 1, 0);
+			this->tr_imageLayout->Controls->Add(this->pictureBox1, 0, 0);
 			this->tr_imageLayout->Location = System::Drawing::Point(10, 5);
 			this->tr_imageLayout->Name = L"tr_imageLayout";
 			this->tr_imageLayout->RowCount = 4;
@@ -693,9 +765,153 @@ namespace DCGAN {
 			this->tr_imageLayout->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 64)));
 			this->tr_imageLayout->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 64)));
 			this->tr_imageLayout->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 64)));
-			this->tr_imageLayout->Size = System::Drawing::Size(262, 256);
+			this->tr_imageLayout->Size = System::Drawing::Size(262, 262);
 			this->tr_imageLayout->TabIndex = 0;
 			this->tr_imageLayout->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MyForm::tableLayoutPanel1_Paint);
+			// 
+			// pictureBox16
+			// 
+			this->pictureBox16->Location = System::Drawing::Point(196, 196);
+			this->pictureBox16->Margin = System::Windows::Forms::Padding(0);
+			this->pictureBox16->Name = L"pictureBox16";
+			this->pictureBox16->Size = System::Drawing::Size(64, 64);
+			this->pictureBox16->TabIndex = 15;
+			this->pictureBox16->TabStop = false;
+			// 
+			// pictureBox15
+			// 
+			this->pictureBox15->Location = System::Drawing::Point(131, 196);
+			this->pictureBox15->Margin = System::Windows::Forms::Padding(0);
+			this->pictureBox15->Name = L"pictureBox15";
+			this->pictureBox15->Size = System::Drawing::Size(64, 64);
+			this->pictureBox15->TabIndex = 14;
+			this->pictureBox15->TabStop = false;
+			// 
+			// pictureBox14
+			// 
+			this->pictureBox14->Location = System::Drawing::Point(66, 196);
+			this->pictureBox14->Margin = System::Windows::Forms::Padding(0);
+			this->pictureBox14->Name = L"pictureBox14";
+			this->pictureBox14->Size = System::Drawing::Size(64, 64);
+			this->pictureBox14->TabIndex = 13;
+			this->pictureBox14->TabStop = false;
+			// 
+			// pictureBox13
+			// 
+			this->pictureBox13->Location = System::Drawing::Point(1, 196);
+			this->pictureBox13->Margin = System::Windows::Forms::Padding(0);
+			this->pictureBox13->Name = L"pictureBox13";
+			this->pictureBox13->Size = System::Drawing::Size(64, 64);
+			this->pictureBox13->TabIndex = 12;
+			this->pictureBox13->TabStop = false;
+			// 
+			// pictureBox12
+			// 
+			this->pictureBox12->Location = System::Drawing::Point(196, 131);
+			this->pictureBox12->Margin = System::Windows::Forms::Padding(0);
+			this->pictureBox12->Name = L"pictureBox12";
+			this->pictureBox12->Size = System::Drawing::Size(64, 64);
+			this->pictureBox12->TabIndex = 11;
+			this->pictureBox12->TabStop = false;
+			// 
+			// pictureBox11
+			// 
+			this->pictureBox11->Location = System::Drawing::Point(131, 131);
+			this->pictureBox11->Margin = System::Windows::Forms::Padding(0);
+			this->pictureBox11->Name = L"pictureBox11";
+			this->pictureBox11->Size = System::Drawing::Size(64, 64);
+			this->pictureBox11->TabIndex = 10;
+			this->pictureBox11->TabStop = false;
+			// 
+			// pictureBox10
+			// 
+			this->pictureBox10->Location = System::Drawing::Point(66, 131);
+			this->pictureBox10->Margin = System::Windows::Forms::Padding(0);
+			this->pictureBox10->Name = L"pictureBox10";
+			this->pictureBox10->Size = System::Drawing::Size(64, 64);
+			this->pictureBox10->TabIndex = 9;
+			this->pictureBox10->TabStop = false;
+			// 
+			// pictureBox9
+			// 
+			this->pictureBox9->Location = System::Drawing::Point(1, 131);
+			this->pictureBox9->Margin = System::Windows::Forms::Padding(0);
+			this->pictureBox9->Name = L"pictureBox9";
+			this->pictureBox9->Size = System::Drawing::Size(64, 64);
+			this->pictureBox9->TabIndex = 8;
+			this->pictureBox9->TabStop = false;
+			// 
+			// pictureBox8
+			// 
+			this->pictureBox8->Location = System::Drawing::Point(196, 66);
+			this->pictureBox8->Margin = System::Windows::Forms::Padding(0);
+			this->pictureBox8->Name = L"pictureBox8";
+			this->pictureBox8->Size = System::Drawing::Size(64, 64);
+			this->pictureBox8->TabIndex = 7;
+			this->pictureBox8->TabStop = false;
+			// 
+			// pictureBox7
+			// 
+			this->pictureBox7->Location = System::Drawing::Point(131, 66);
+			this->pictureBox7->Margin = System::Windows::Forms::Padding(0);
+			this->pictureBox7->Name = L"pictureBox7";
+			this->pictureBox7->Size = System::Drawing::Size(64, 64);
+			this->pictureBox7->TabIndex = 6;
+			this->pictureBox7->TabStop = false;
+			// 
+			// pictureBox6
+			// 
+			this->pictureBox6->Location = System::Drawing::Point(66, 66);
+			this->pictureBox6->Margin = System::Windows::Forms::Padding(0);
+			this->pictureBox6->Name = L"pictureBox6";
+			this->pictureBox6->Size = System::Drawing::Size(64, 64);
+			this->pictureBox6->TabIndex = 5;
+			this->pictureBox6->TabStop = false;
+			// 
+			// pictureBox5
+			// 
+			this->pictureBox5->Location = System::Drawing::Point(1, 66);
+			this->pictureBox5->Margin = System::Windows::Forms::Padding(0);
+			this->pictureBox5->Name = L"pictureBox5";
+			this->pictureBox5->Size = System::Drawing::Size(64, 64);
+			this->pictureBox5->TabIndex = 4;
+			this->pictureBox5->TabStop = false;
+			// 
+			// pictureBox4
+			// 
+			this->pictureBox4->Location = System::Drawing::Point(196, 1);
+			this->pictureBox4->Margin = System::Windows::Forms::Padding(0);
+			this->pictureBox4->Name = L"pictureBox4";
+			this->pictureBox4->Size = System::Drawing::Size(64, 64);
+			this->pictureBox4->TabIndex = 3;
+			this->pictureBox4->TabStop = false;
+			// 
+			// pictureBox3
+			// 
+			this->pictureBox3->Location = System::Drawing::Point(131, 1);
+			this->pictureBox3->Margin = System::Windows::Forms::Padding(0);
+			this->pictureBox3->Name = L"pictureBox3";
+			this->pictureBox3->Size = System::Drawing::Size(64, 64);
+			this->pictureBox3->TabIndex = 2;
+			this->pictureBox3->TabStop = false;
+			// 
+			// pictureBox2
+			// 
+			this->pictureBox2->Location = System::Drawing::Point(66, 1);
+			this->pictureBox2->Margin = System::Windows::Forms::Padding(0);
+			this->pictureBox2->Name = L"pictureBox2";
+			this->pictureBox2->Size = System::Drawing::Size(64, 64);
+			this->pictureBox2->TabIndex = 1;
+			this->pictureBox2->TabStop = false;
+			// 
+			// pictureBox1
+			// 
+			this->pictureBox1->Location = System::Drawing::Point(1, 1);
+			this->pictureBox1->Margin = System::Windows::Forms::Padding(0);
+			this->pictureBox1->Name = L"pictureBox1";
+			this->pictureBox1->Size = System::Drawing::Size(64, 64);
+			this->pictureBox1->TabIndex = 0;
+			this->pictureBox1->TabStop = false;
 			// 
 			// tr_imagesScroll
 			// 
@@ -706,6 +922,7 @@ namespace DCGAN {
 			this->tr_imagesScroll->Name = L"tr_imagesScroll";
 			this->tr_imagesScroll->Size = System::Drawing::Size(266, 18);
 			this->tr_imagesScroll->TabIndex = 16;
+			this->tr_imagesScroll->ValueChanged += gcnew System::EventHandler(this, &MyForm::tr_imagesScroll_ValueChanged);
 			// 
 			// tabDiagram
 			// 
@@ -759,7 +976,7 @@ namespace DCGAN {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(704, 611);
+			this->ClientSize = System::Drawing::Size(404, 301);
 			this->Controls->Add(this->tabControl1);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
@@ -767,6 +984,7 @@ namespace DCGAN {
 			this->MinimumSize = System::Drawing::Size(420, 340);
 			this->Name = L"MyForm";
 			this->Text = L"DCGAN";
+			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &MyForm::MyForm_FormClosed);
 			this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
 			this->tabControl1->ResumeLayout(false);
 			this->tabmain_generate->ResumeLayout(false);
@@ -780,6 +998,23 @@ namespace DCGAN {
 			this->tabControl2->ResumeLayout(false);
 			this->tabImages->ResumeLayout(false);
 			this->tabImages->PerformLayout();
+			this->tr_imageLayout->ResumeLayout(false);
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox16))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox15))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox14))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox13))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox12))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox11))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox10))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox9))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox8))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox7))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox6))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox5))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox4))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox3))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
 			this->tabDiagram->ResumeLayout(false);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart))->EndInit();
 			this->ResumeLayout(false);
@@ -889,7 +1124,6 @@ private: System::Void btn_generate_Click(System::Object^ sender, System::EventAr
 }
 
 private: System::Void generateImageBWorker_DoWork(System::Object^ sender, System::ComponentModel::DoWorkEventArgs^ e) {
-	using namespace WrapperCLI;
 	auto args = safe_cast<Tuple<String^, String^, String^, String^>^>(e->Argument);
 	String^ sys_gName = args->Item1;
 	String^ sys_imageFormat = args->Item2;
@@ -948,6 +1182,9 @@ private: System::Void btn_tr_startTraining_Click(System::Object^ sender, System:
 		tr_tb_moments->Enabled = false;
 		tr_tb_novirze->Enabled = false;
 
+		tr_imagesScroll->Enabled = true;
+		label_tr_counter->Visible = true;
+
 		btn_tr_startTraining->Text = L"Apturēt apmācību";
 		tr_tb_infobox->Text += L"<Neironu tīkla apmācības procesa uzsākšana>\r\n";
 		Application::DoEvents();
@@ -972,14 +1209,41 @@ private: delegate void delegateAddStringInfoBox(String^ string);
 private: delegate void delegateSetProgressBar(int size);
 private: delegate void delegateUpdateProgressBar();
 private: delegate void delegateUpdateDiagram(int i, double d, double g);
+private: delegate void delegateSetNullImages();
+private: delegate void delegateUpdateScroll();
 
 private: delegateAddStringInfoBox^ myDelegateAddString;
 private: delegateSetProgressBar^ myDelegateSetProgressBar;
 private: delegateUpdateProgressBar^ myDelegateUpdateProgressBar;
 private: delegateUpdateDiagram^ myDelegateUpdateDiagram;
+private: delegateSetNullImages^ myDelegateSetNullImages;
+private: delegateUpdateScroll^ myDelegateUpdateScroll;
+
+private:void setNullImages() {
+	tr_imagesScroll->Value = 0;
+	label_tr_counter->Text = String::Format(L"Epoha: 0");
+
+	std::wstring dir = getDocPath() + L"\\DCGAN\\temp\\";
+	pictureBox1->Image = gcnew Bitmap(gcnew String((dir + L"0_1.jpg").c_str()));
+	pictureBox2->Image = gcnew Bitmap(gcnew String((dir + L"0_2.jpg").c_str()));
+	pictureBox3->Image = gcnew Bitmap(gcnew String((dir + L"0_3.jpg").c_str()));
+	pictureBox4->Image = gcnew Bitmap(gcnew String((dir + L"0_4.jpg").c_str()));
+	pictureBox5->Image = gcnew Bitmap(gcnew String((dir + L"0_5.jpg").c_str()));
+	pictureBox6->Image = gcnew Bitmap(gcnew String((dir + L"0_6.jpg").c_str()));
+	pictureBox7->Image = gcnew Bitmap(gcnew String((dir + L"0_7.jpg").c_str()));
+	pictureBox8->Image = gcnew Bitmap(gcnew String((dir + L"0_8.jpg").c_str()));
+	pictureBox9->Image = gcnew Bitmap(gcnew String((dir + L"0_9.jpg").c_str()));
+	pictureBox10->Image = gcnew Bitmap(gcnew String((dir + L"0_10.jpg").c_str()));
+	pictureBox11->Image = gcnew Bitmap(gcnew String((dir + L"0_11.jpg").c_str()));
+	pictureBox12->Image = gcnew Bitmap(gcnew String((dir + L"0_12.jpg").c_str()));
+	pictureBox13->Image = gcnew Bitmap(gcnew String((dir + L"0_13.jpg").c_str()));
+	pictureBox14->Image = gcnew Bitmap(gcnew String((dir + L"0_14.jpg").c_str()));
+	pictureBox15->Image = gcnew Bitmap(gcnew String((dir + L"0_15.jpg").c_str()));
+	pictureBox16->Image = gcnew Bitmap(gcnew String((dir + L"0_16.jpg").c_str()));
+}
 
 private: void addStringInfoBox(String^ string) {
-	tr_tb_infobox->Text += string;
+	tr_tb_infobox->AppendText(string);
 }
 private: void setProgressBar(int size) {
 	toolStripProgressBar->Value = 0;
@@ -992,9 +1256,11 @@ private: void UpdateDiagram(int i, double d, double g) {
 	this->chart->Series[0]->Points->AddXY(i, d);
 	this->chart->Series[1]->Points->AddXY(i, g);
 }
+private: void updateScroll() {
+	tr_imagesScroll->Maximum++;
+}
 private: System::Void trainingBWorker_DoWork(System::Object^ sender, System::ComponentModel::DoWorkEventArgs^ e) 
 {
-	using namespace WrapperCLI;
 	//Threading::Thread::CurrentThread->CurrentCulture = gcnew Globalization::CultureInfo("en-US", false);
 	//Globalization::NumberFormatInfo^ nfi = Globalization::CultureInfo::CurrentCulture->NumberFormat;
 	auto args = safe_cast<Tuple<String^, String^, String^, String^, String^, String^, String^>^>(e->Argument);
@@ -1029,64 +1295,356 @@ private: System::Void trainingBWorker_DoWork(System::Object^ sender, System::Com
 	MyForm::Invoke(myDelegateAddString, L"<Visi sagatavošanās darbi ir pabeigti, apmācība sākas>\r\n\r\n");
 	int iterations = (int)(dataset_size / batchsize);
 	int allsize = epohs * iterations;
+
 	myDelegateSetProgressBar = gcnew delegateSetProgressBar(this, &MyForm::setProgressBar);
 	myDelegateUpdateProgressBar = gcnew delegateUpdateProgressBar(this, &MyForm::UpdateProgressBar);
 	myDelegateUpdateDiagram = gcnew delegateUpdateDiagram(this, &MyForm::UpdateDiagram);
-	MyForm::Invoke(myDelegateSetProgressBar, allsize);
+	myDelegateUpdateScroll = gcnew delegateUpdateScroll(this, &MyForm::updateScroll);
+	myDelegateSetNullImages = gcnew delegateSetNullImages(this, &MyForm::setNullImages);
+
+	MyForm::Invoke(myDelegateSetProgressBar, allsize*2); //IZMENIL NA DVA
+
+	std::wstring dir = getDocPath() + L"\\DCGAN\\temp\\";
+	CreateDirectory(dir.c_str(), NULL);
+	SetFileAttributes(dir.c_str(), FILE_ATTRIBUTE_HIDDEN);
+
 	setTimer::Timer_CLI^ timer = gcnew setTimer::Timer_CLI;
 	timer->setTimer();
+	//for (size_t ep = 0; ep < epohs; ep++) {
+	//	if (is_training) {
+	//		//showimages
+	//		for (size_t sh = 0; sh < 16; sh++) {
+	//			*X = Tensor::Tensor3d_CLI<double>(1, 1, 100);
+	//			for (size_t j = 0; j < 100; j++) {
+	//				X(0, 0, j) = NeuralNetwork::normalDistribution(0, 1);
+	//			}
+	//			G->forward(*X);
+	//			ImageProcessing::normalizeImageValues(G->getNeurons(), -1, 1, 0, 255);
+	//			std::wstring filename = dir + std::to_wstring(ep) + L"_" + std::to_wstring(sh + 1) + L".jpg";
+	//			ImageProcessing::save_jpg_image(G->getNeurons(), filename);
+	//			SetFileAttributes(filename.c_str(), FILE_ATTRIBUTE_HIDDEN);
+	//		}
+	//		if (ep != 0) {
+	//			MyForm::Invoke(myDelegateUpdateScroll);
+	//		}
+	//		else {
+	//			MyForm::Invoke(myDelegateSetNullImages);
+	//		}
+	//		for (size_t i = 0; i < iterations; i++) {
+	//			if (is_training) {
+	//				for (size_t b = 0; b < batchsize; b++) {
+	//					String^ filename = fileEntries[rand->Next(dataset_size)];
+	//					ImageProcessingCLI::getImageValues(*X, filename);
+	//					ImageProcessing::normalizeImageValues(X->getTensor3d());
+
+	//					D->forward(*X);
+	//					D->backward();
+
+	//					*X = Tensor::Tensor3d_CLI<double>(1, 1, 100);
+
+	//					for (size_t j = 0; j < 100; j++) {
+	//						X(0, 0, j) = NeuralNetwork::normalDistribution(0, 1);
+	//					}
+
+	//					G->forward(*X);
+
+	//					X->getTensor3d() = G->getNeurons();
+
+	//					D->forward(*X);
+	//					D->backward();
+	//					//G->backward();
+	//					D->clearOutputs();
+	//				}
+	//				D->countBatchError();
+	//				G->countBatchError();
+
+	//				//tut chista boutputs
+	//				D->cleareBatchOutputs();
+
+	//				D->updateAllParameters();
+	//				//G->updateAllParameters();
+
+	//				String^ str_ep = Convert::ToString(ep + 1);
+	//				String^ str_epohs = Convert::ToString(epohs);
+	//				String^ str_i = Convert::ToString(i + 1);
+	//				String^ str_iterat = Convert::ToString(iterations);
+	//				String^ str_D_error = Convert::ToString(String::Format("{0:F4}", D->getError()));
+	//				String^ str_G_error = Convert::ToString(String::Format("{0:F4}", G->getError()));
+	//				/*Console::WriteLine(D->getError());
+	//				Console::WriteLine(G->getError());
+	//				Console::WriteLine(L"==========");*/
+	//				std::cout << D->getError() << std::endl;
+	//				std::cout << G->getError() << std::endl;
+	//				std::cout << "==========" << std::endl;
+	//				//String^ time = String::Format("{0}m:{1}s:{2}ms", timer->getTime().count() / 60000, (timer->getTime().count() % 60000) / 1000, timer->getTime().count() % 1000);
+	//				auto t_hours = std::chrono::duration_cast<std::chrono::hours>(timer->getTime()).count();
+	//				auto t_min = std::chrono::duration_cast<std::chrono::minutes>(timer->getTime() % std::chrono::hours(1)).count();
+	//				auto t_seconds = std::chrono::duration_cast<std::chrono::seconds>(timer->getTime() % std::chrono::minutes(1)).count();
+	//				String^ time = String::Format("{0}h:{1}m:{2}s", t_hours, t_min, t_seconds);
+
+	//				String^ str_out = String::Format("  [{0}/{1}]\t[{2}/{3}]\t\t{4}\t\t{5}\t\t{6}\r\n", str_ep, str_epohs, str_i, str_iterat, str_D_error, str_G_error, time);
+	//				MyForm::Invoke(myDelegateAddString, str_out);
+
+	//			}
+	//			else {
+	//				break;
+	//			}
+	//			MyForm::Invoke(myDelegateUpdateProgressBar);
+
+	//			MyForm::Invoke(myDelegateUpdateDiagram, (int)i, D->getError(), G->getError());
+	//		}
+
+	//		//test
+	//		for (size_t i = 0; i < iterations; i++) {
+	//			if (is_training) {
+	//				for (size_t b = 0; b < batchsize; b++) {
+
+	//					String^ filename = fileEntries[rand->Next(dataset_size)];
+	//					ImageProcessingCLI::getImageValues(*X, filename);
+	//					ImageProcessing::normalizeImageValues(X->getTensor3d());
+
+	//					D->forward(*X);
+
+	//					*X = Tensor::Tensor3d_CLI<double>(1, 1, 100);
+
+	//					for (size_t j = 0; j < 100; j++) {
+	//						X(0, 0, j) = NeuralNetwork::normalDistribution(0, 1);
+	//					}
+
+	//					G->forward(*X);
+
+	//					X->getTensor3d() = G->getNeurons();
+
+	//					//fake doutputs set
+	//					//D->fakeOutputsPut();
+
+	//					D->forward(*X);
+	//					//D->backward();
+	//					G->backward();
+	//					D->clearOutputs();
+	//				}
+	//				D->countBatchError();
+	//				G->countBatchError();
+
+	//				//tut chista boutputs
+	//				D->cleareBatchOutputs();
+
+	//				
+	//				G->updateAllParameters();
+
+	//				String^ str_ep = Convert::ToString(ep + 1);
+	//				String^ str_epohs = Convert::ToString(epohs);
+	//				String^ str_i = Convert::ToString(i + 1 + iterations);
+	//				String^ str_iterat = Convert::ToString(iterations * 2);
+	//				String^ str_D_error = Convert::ToString(String::Format("{0:F4}", D->getError()));
+	//				String^ str_G_error = Convert::ToString(String::Format("{0:F4}", G->getError()));
+	//				/*Console::WriteLine(D->getError());
+	//				Console::WriteLine(G->getError());
+	//				Console::WriteLine(L"==========");*/
+	//				std::cout << D->getError() << std::endl;
+	//				std::cout << G->getError() << std::endl;
+	//				std::cout << "==========" << std::endl;
+	//				//String^ time = String::Format("{0}m:{1}s:{2}ms", timer->getTime().count() / 60000, (timer->getTime().count() % 60000) / 1000, timer->getTime().count() % 1000);
+	//				auto t_hours = std::chrono::duration_cast<std::chrono::hours>(timer->getTime()).count();
+	//				auto t_min = std::chrono::duration_cast<std::chrono::minutes>(timer->getTime() % std::chrono::hours(1)).count();
+	//				auto t_seconds = std::chrono::duration_cast<std::chrono::seconds>(timer->getTime() % std::chrono::minutes(1)).count();
+	//				String^ time = String::Format("{0}h:{1}m:{2}s", t_hours, t_min, t_seconds);
+
+	//				String^ str_out = String::Format("  [{0}/{1}]\t[{2}/{3}]\t\t{4}\t\t{5}\t\t{6}\r\n", str_ep, str_epohs, str_i, str_iterat, str_D_error, str_G_error, time);
+	//				MyForm::Invoke(myDelegateAddString, str_out);
+
+	//			}
+	//			else {
+	//				break;
+	//			}
+	//			MyForm::Invoke(myDelegateUpdateProgressBar);
+
+	//			MyForm::Invoke(myDelegateUpdateDiagram, (int)i, D->getError(), G->getError());
+	//		}
+	//	}
+	//	else {
+	//		break;
+	//	}
+	//}
+	int it_count = 0;
 	for (size_t ep = 0; ep < epohs; ep++) {
-		for (size_t i = 0; i < iterations; i++) {
-			if (is_training) {
-				for (size_t b = 0; b < batchsize; b++) {
-					String^ filename = fileEntries[rand->Next(dataset_size)];
-					ImageProcessingCLI::getImageValues(*X, filename);
-					ImageProcessing::normalizeImageValues(X->getTensor3d());
-
-					D->forward(*X);
-					D->backward();
-
-					*X = Tensor::Tensor3d_CLI<double>(1, 1, 100);
-
-					for (size_t j = 0; j < 100; j++) {
-						X(0, 0, j) = NeuralNetwork::normalDistribution(0, 1);
-					}
-
-					G->forward(*X);
-
-					X->getTensor3d() = G->getNeurons();
-
-					D->forward(*X);
-					D->backward();
-
-					D->clearOutputs();
+		if (is_training) {
+			//showimages
+			/*for (size_t sh = 0; sh < 16; sh++) {
+				*X = Tensor::Tensor3d_CLI<double>(1, 1, 100);
+				for (size_t j = 0; j < 100; j++) {
+					X(0, 0, j) = NeuralNetwork::normalDistribution(0, 1);
 				}
-				D->countBatchError();
-				G->countBatchError();
-				
-				D->updateAllParameters();
-				String^ str_ep = Convert::ToString(ep+1);
-				String^ str_epohs = Convert::ToString(epohs);
-				String^ str_i = Convert::ToString(i+1);
-				String^ str_iterat = Convert::ToString(iterations);
-				String^ str_D_error = Convert::ToString(String::Format("{0:F4}", D->getError()));
-				String^ str_G_error = Convert::ToString(String::Format("{0:F4}", G->getError()));
-				//String^ time = String::Format("{0}m:{1}s:{2}ms", timer->getTime().count() / 60000, (timer->getTime().count() % 60000) / 1000, timer->getTime().count() % 1000);
-				auto t_hours = std::chrono::duration_cast<std::chrono::hours>(timer->getTime()).count();
-				auto t_min = std::chrono::duration_cast<std::chrono::minutes>(timer->getTime() % std::chrono::hours(1)).count();
-				auto t_seconds = std::chrono::duration_cast<std::chrono::seconds>(timer->getTime() % std::chrono::minutes(1)).count();
-				String^ time = String::Format("{0}h:{1}m:{2}s", t_hours, t_min, t_seconds);
-				
-				String^ str_out = String::Format("  [{0}/{1}]\t[{2}/{3}]\t\t{4}\t\t{5}\t\t{6}\r\n", str_ep, str_epohs, str_i, str_iterat, str_D_error, str_G_error, time);
-				MyForm::Invoke(myDelegateAddString, str_out);
-				
+				G->forward(*X);
+				ImageProcessing::normalizeImageValues(G->getNeurons(), -1, 1, 0, 255);
+				std::wstring filename = dir + std::to_wstring(ep) + L"_" + std::to_wstring(sh + 1) + L".jpg";
+				ImageProcessing::save_jpg_image(G->getNeurons(), filename);
+				SetFileAttributes(filename.c_str(), FILE_ATTRIBUTE_HIDDEN);
+			}
+			if (ep != 0) {
+				MyForm::Invoke(myDelegateUpdateScroll);
 			}
 			else {
-				break;
+				MyForm::Invoke(myDelegateSetNullImages);
+			}*/
+			for (size_t i = 0; i < iterations; i++) {
+				if (is_training) {
+					for (size_t b = 0; b < batchsize; b++) {
+						String^ filename = fileEntries[rand->Next(dataset_size)];
+						ImageProcessingCLI::getImageValues(*X, filename);
+						ImageProcessing::normalizeImageValues(X->getTensor3d());
+
+						D->forward(*X);
+						D->backward();
+
+						*X = Tensor::Tensor3d_CLI<double>(1, 1, 100);
+
+						for (size_t j = 0; j < 100; j++) {
+							X(0, 0, j) = NeuralNetwork::normalDistribution(0, 1);
+						}
+
+						G->forward(*X);
+
+						X->getTensor3d() = G->getNeurons();
+
+						D->forward(*X);
+						D->backward();
+						//G->backward();
+						D->clearOutputs();
+					}
+					D->countBatchError();
+					G->countBatchError();
+
+					//tut chista boutputs
+					D->cleareBatchOutputs();
+
+					D->updateAllParameters();
+					//G->updateAllParameters();
+
+					String^ str_ep = Convert::ToString(ep + 1);
+					String^ str_epohs = Convert::ToString(epohs);
+					String^ str_i = Convert::ToString(i + 1);
+					String^ str_iterat = Convert::ToString(iterations);
+					String^ str_D_error = Convert::ToString(String::Format("{0:F4}", D->getError()));
+					String^ str_G_error = Convert::ToString(String::Format("{0:F4}", G->getError()));
+					/*Console::WriteLine(D->getError());
+					Console::WriteLine(G->getError());
+					Console::WriteLine(L"==========");*/
+					std::cout << D->getError() << std::endl;
+					std::cout << G->getError() << std::endl;
+					std::cout << "==========" << std::endl;
+					//String^ time = String::Format("{0}m:{1}s:{2}ms", timer->getTime().count() / 60000, (timer->getTime().count() % 60000) / 1000, timer->getTime().count() % 1000);
+					auto t_hours = std::chrono::duration_cast<std::chrono::hours>(timer->getTime()).count();
+					auto t_min = std::chrono::duration_cast<std::chrono::minutes>(timer->getTime() % std::chrono::hours(1)).count();
+					auto t_seconds = std::chrono::duration_cast<std::chrono::seconds>(timer->getTime() % std::chrono::minutes(1)).count();
+					String^ time = String::Format("{0}h:{1}m:{2}s", t_hours, t_min, t_seconds);
+
+					String^ str_out = String::Format("D  [{0}/{1}]\t[{2}/{3}]\t\t{4}\t\t{5}\t\t{6}\r\n", str_ep, str_epohs, str_i, str_iterat, str_D_error, str_G_error, time);
+					MyForm::Invoke(myDelegateAddString, str_out);
+
+				}
+				else {
+					break;
+				}
+				MyForm::Invoke(myDelegateUpdateProgressBar);
+				it_count++;
+				MyForm::Invoke(myDelegateUpdateDiagram, it_count, D->getError(), G->getError());
 			}
-			MyForm::Invoke(myDelegateUpdateProgressBar);
-			
-			MyForm::Invoke(myDelegateUpdateDiagram, (int)i, D->getError(), G->getError());
+		}
+		else {
+			break;
+		}
+	}
+
+	for (size_t ep = 0; ep < epohs; ep++) {
+		if (is_training) {
+			//showimages
+			for (size_t sh = 0; sh < 16; sh++) {
+				*X = Tensor::Tensor3d_CLI<double>(1, 1, 100);
+				for (size_t j = 0; j < 100; j++) {
+					X(0, 0, j) = NeuralNetwork::normalDistribution(0, 1);
+				}
+				G->forward(*X);
+				ImageProcessing::normalizeImageValues(G->getNeurons(), -1, 1, 0, 255);
+				std::wstring filename = dir + std::to_wstring(ep) + L"_" + std::to_wstring(sh + 1) + L".jpg";
+				ImageProcessing::save_jpg_image(G->getNeurons(), filename);
+				SetFileAttributes(filename.c_str(), FILE_ATTRIBUTE_HIDDEN);
+			}
+			if (ep != 0) {
+				MyForm::Invoke(myDelegateUpdateScroll);
+			}
+			else {
+				MyForm::Invoke(myDelegateSetNullImages);
+			}
+			for (size_t i = 0; i < iterations; i++) {
+				if (is_training) {
+					for (size_t b = 0; b < batchsize; b++) {
+
+						String^ filename = fileEntries[rand->Next(dataset_size)];
+						ImageProcessingCLI::getImageValues(*X, filename);
+						ImageProcessing::normalizeImageValues(X->getTensor3d());
+
+						D->forward(*X);
+
+						*X = Tensor::Tensor3d_CLI<double>(1, 1, 100);
+
+						for (size_t j = 0; j < 100; j++) {
+							X(0, 0, j) = NeuralNetwork::normalDistribution(0, 1);
+						}
+
+						G->forward(*X);
+
+						X->getTensor3d() = G->getNeurons();
+
+						//fake doutputs set
+						//D->fakeOutputsPut();
+
+						D->forward(*X);
+						//D->backward();
+						G->backward();
+						D->clearOutputs();
+					}
+					D->countBatchError();
+					G->countBatchError();
+
+					//tut chista boutputs
+					D->cleareBatchOutputs();
+
+
+					G->updateAllParameters();
+
+					String^ str_ep = Convert::ToString(ep + 1);
+					String^ str_epohs = Convert::ToString(epohs);
+					String^ str_i = Convert::ToString(i + 1);
+					String^ str_iterat = Convert::ToString(iterations);
+					String^ str_D_error = Convert::ToString(String::Format("{0:F4}", D->getError()));
+					String^ str_G_error = Convert::ToString(String::Format("{0:F4}", G->getError()));
+					/*Console::WriteLine(D->getError());
+					Console::WriteLine(G->getError());
+					Console::WriteLine(L"==========");*/
+					std::cout << D->getError() << std::endl;
+					std::cout << G->getError() << std::endl;
+					std::cout << "==========" << std::endl;
+					//String^ time = String::Format("{0}m:{1}s:{2}ms", timer->getTime().count() / 60000, (timer->getTime().count() % 60000) / 1000, timer->getTime().count() % 1000);
+					auto t_hours = std::chrono::duration_cast<std::chrono::hours>(timer->getTime()).count();
+					auto t_min = std::chrono::duration_cast<std::chrono::minutes>(timer->getTime() % std::chrono::hours(1)).count();
+					auto t_seconds = std::chrono::duration_cast<std::chrono::seconds>(timer->getTime() % std::chrono::minutes(1)).count();
+					String^ time = String::Format("{0}h:{1}m:{2}s", t_hours, t_min, t_seconds);
+
+					String^ str_out = String::Format("G  [{0}/{1}]\t[{2}/{3}]\t\t{4}\t\t{5}\t\t{6}\r\n", str_ep, str_epohs, str_i, str_iterat, str_D_error, str_G_error, time);
+					MyForm::Invoke(myDelegateAddString, str_out);
+
+				}
+				else {
+					break;
+				}
+				MyForm::Invoke(myDelegateUpdateProgressBar);
+				it_count++;
+				MyForm::Invoke(myDelegateUpdateDiagram, it_count, D->getError(), G->getError());
+			}
+		}
+		else {
+			break;
 		}
 	}
 
@@ -1115,5 +1673,32 @@ private: System::Void trainingBWorker_RunWorkerCompleted(System::Object^ sender,
 	Application::DoEvents();
 }
 
+
+private: System::Void MyForm_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
+	//std::wstring dir = getDocPath() + L"\\DCGAN\\temp\\";
+	//std::filesystem::remove_all(dir);
+}
+private: System::Void tr_imagesScroll_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
+	int scV = tr_imagesScroll->Value;
+	label_tr_counter->Text = String::Format(L"Epoha: {0}", scV);
+
+	std::wstring dir = getDocPath() + L"\\DCGAN\\temp\\";
+	pictureBox1->Image = gcnew Bitmap(gcnew String((dir + std::to_wstring(scV) + L"_1.jpg").c_str()));
+	pictureBox2->Image = gcnew Bitmap(gcnew String((dir + std::to_wstring(scV) + L"_2.jpg").c_str()));
+	pictureBox3->Image = gcnew Bitmap(gcnew String((dir + std::to_wstring(scV) + L"_3.jpg").c_str()));
+	pictureBox4->Image = gcnew Bitmap(gcnew String((dir + std::to_wstring(scV) + L"_4.jpg").c_str()));
+	pictureBox5->Image = gcnew Bitmap(gcnew String((dir + std::to_wstring(scV) + L"_5.jpg").c_str()));
+	pictureBox6->Image = gcnew Bitmap(gcnew String((dir + std::to_wstring(scV) + L"_6.jpg").c_str()));
+	pictureBox7->Image = gcnew Bitmap(gcnew String((dir + std::to_wstring(scV) + L"_7.jpg").c_str()));
+	pictureBox8->Image = gcnew Bitmap(gcnew String((dir + std::to_wstring(scV) + L"_8.jpg").c_str()));
+	pictureBox9->Image = gcnew Bitmap(gcnew String((dir + std::to_wstring(scV) + L"_9.jpg").c_str()));
+	pictureBox10->Image = gcnew Bitmap(gcnew String((dir + std::to_wstring(scV) + L"_10.jpg").c_str()));
+	pictureBox11->Image = gcnew Bitmap(gcnew String((dir + std::to_wstring(scV) + L"_11.jpg").c_str()));
+	pictureBox12->Image = gcnew Bitmap(gcnew String((dir + std::to_wstring(scV) + L"_12.jpg").c_str()));
+	pictureBox13->Image = gcnew Bitmap(gcnew String((dir + std::to_wstring(scV) + L"_13.jpg").c_str()));
+	pictureBox14->Image = gcnew Bitmap(gcnew String((dir + std::to_wstring(scV) + L"_14.jpg").c_str()));
+	pictureBox15->Image = gcnew Bitmap(gcnew String((dir + std::to_wstring(scV) + L"_15.jpg").c_str()));
+	pictureBox16->Image = gcnew Bitmap(gcnew String((dir + std::to_wstring(scV) + L"_16.jpg").c_str()));
+}
 };
 }

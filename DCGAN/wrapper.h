@@ -196,6 +196,15 @@ namespace WrapperCLI {
                 m_pDiscriminator->loadAllWeights();
             }
 
+            void cleareBatchOutputs() {
+                m_pDiscriminator->getBatchOutputs().clear();
+            }
+
+            void fakeOutputsPut() {
+                m_pDiscriminator->getOutputs().push_back(0);
+                m_pDiscriminator->getBatchOutputs().push_back(0);
+            }
+
 
         };
 
@@ -250,7 +259,14 @@ namespace WrapperCLI {
                 m_pGenerator->saveAllWeights();
             }
 
-            
+            void backward() {
+                m_pGenerator->backward();
+            }
+
+            void updateAllParameters() {
+                m_pGenerator->updateAllParameters();
+            }
+
             Tensor3d<double>& getNeurons() {
                 return m_pGenerator->getNeurons();
             }

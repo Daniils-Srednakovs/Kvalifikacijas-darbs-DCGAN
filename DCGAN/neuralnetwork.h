@@ -7,6 +7,7 @@
 #include <string>
 #include <shlobj.h>
 #include <msclr\marshal_cppstd.h>
+#include <math.h>
 
 #pragma comment(lib, "shell32.lib")
 
@@ -154,7 +155,7 @@ namespace NeuralNetwork {
 				for (size_t i = 0; i < X.getX(); i++) {
 					for (size_t j = 0; j < X.getY(); j++) {
 						for (size_t k = 0; k < X.getZ(); k++) {
-							X.operator()(i, j, k) = -1 / d_outputs[0]; //for D(x) //64x64
+							X.operator()(i, j, k) = -1.0 / d_outputs[0]; //for D(x) //64x64
 						}
 					}
 				}
@@ -164,7 +165,7 @@ namespace NeuralNetwork {
 				for (size_t i = 0; i < X.getX(); i++) {
 					for (size_t j = 0; j < X.getY(); j++) {
 						for (size_t k = 0; k < X.getZ(); k++) {
-							X.operator()(i, j, k) = 1 / (1 - d_outputs[1]); //for D(G(z))
+							X.operator()(i, j, k) = 1.0 / (1.0 - d_outputs[1]); //for D(G(z))
 						}
 					}
 				}
@@ -318,7 +319,7 @@ namespace NeuralNetwork {
 			{
 				error_sum += log(batch_d_outputs[i - 1]) + log(1 - batch_d_outputs[i]); // to MAX
 			}
-			error = -(1.0 / batch_d_outputs.size()) * error_sum;
+			error = -(1.0 / (double)batch_d_outputs.size()) * error_sum;
 			//batch_d_outputs.clear();
 		}
 	};
@@ -336,7 +337,7 @@ namespace NeuralNetwork {
 			for (size_t i = 0; i < X.getX(); i++) {
 				for (size_t j = 0; j < X.getY(); j++) {
 					for (size_t k = 0; k < X.getZ(); k++) {
-						X.operator()(i, j, k) = 1 / outputs; //sdes bilo -1/ outputs
+						X.operator()(i, j, k) = 1.0 / outputs; //sdes bilo -1/ outputs
 					}
 				}
 			}
@@ -359,8 +360,8 @@ namespace NeuralNetwork {
 					error_sum += log(outputs[i]); //to MAX
 				}
 			}
-			error = (1.0 / (n / 2.0)) * error_sum; //SDES NADO LIBO MINUS LIBO PLUS
-			ptr_d->getBatchOutputs().clear();
+			error = (1.0 / ((double)n / 2.0)) * error_sum; //SDES NADO LIBO MINUS LIBO PLUS
+			//ptr_d->getBatchOutputs().clear();
 		}
 		//Layer glayers[5]
 		//{
@@ -494,6 +495,29 @@ namespace NeuralNetwork {
 		void backward() override
 		{
 			countOuterGradient();
+
+			//Layer 5
+			layers[4]->actTanh();
+			layers[4]->backTransposedConv();
+
+			//Layer 4
+			layers[3]->actReLu();
+			layers[3]->backBatchNorm();
+			layers[3]->backTransposedConv();
+
+			//Layer 3
+			layers[2]->actReLu();
+			layers[2]->backBatchNorm();
+			layers[2]->backTransposedConv();
+
+			//Layer 2
+			layers[1]->actReLu();
+			layers[1]->backBatchNorm();
+			layers[1]->backTransposedConv();
+
+			layers[0]->actReLu();
+			layers[0]->backBatchNorm();
+			layers[0]->backTransposedConv();
 		}
 	};
 

@@ -39,14 +39,39 @@ void ImageProcessing::getImageValues(Tensor3d<double>& ix, std::wstring wfilenam
 
 void ImageProcessing::normalizeImageValues(Tensor3d<double>& x, double oldMin, double oldMax, double newMin, double newMax) {
 
-    double oldRange = oldMax - oldMin;
-    double newRange = newMax - newMin;
+    /*double oldRange = oldMax - oldMin;
+    double newRange = newMax - newMin;*/
 
+    /*int minValue = INT_MAX;
+    for (size_t i = 0; i < x.getX(); ++i) {
+        for (size_t j = 0; j < x.getY(); ++j) {
+            for (size_t k = 0; k < x.getZ(); ++k) {
+                if (x(i,j,k) < minValue) {
+                    minValue = x(i, j, k);
+                }
+            }
+        }
+    }
+
+    int maxValue = INT_MIN;
+    for (size_t i = 0; i < x.getX(); ++i) {
+        for (size_t j = 0; j < x.getY(); ++j) {
+            for (size_t k = 0; k < x.getZ(); ++k) {
+                if (x(i, j, k) > maxValue) {
+                    maxValue = x(i, j, k);
+                }
+            }
+        }
+    }
+
+    oldMin = minValue;
+    oldMax = maxValue;*/
     for (int i = 0; i < x.getX(); i++) {
         for (int j = 0; j < x.getY(); j++) {
             for (int k = 0; k < x.getZ(); k++) {
-                double scale = (x(i, j, k) - oldMin) / oldRange;
-                x(i, j, k) = newMin + (newRange * scale);
+                /*double scale = (x(i, j, k) - oldMin) / oldRange;
+                x(i, j, k) = newMin + (newRange * scale);*/
+                x(i, j, k) = (x(i, j, k) - oldMin) * ((newMax - newMin) / (oldMax - oldMin)) + newMin;
             }
         }
     }

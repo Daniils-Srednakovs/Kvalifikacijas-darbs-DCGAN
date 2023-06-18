@@ -196,8 +196,224 @@ void NeuralNetwork::nn::Layer::printKernelValues()
 	V.printTensorValues();
 }
 
+void backconvKernel(Tensor4d<double>& out, Tensor3d<double>& X, Tensor3d<double>& K, size_t pad, size_t str) {
+	//K.rotate180();
+	
+	if (str != 1) {
+		K.interweave();
+	}
+	
+	size_t nh = (X.getX() - K.getX() + 2 * pad + str) / str;
+	size_t nw = (X.getY() - K.getY() + 2 * pad + str) / str;
+
+	size_t k_s = K.getX();
+	size_t i_ch = X.getZ();
+	size_t o_ch = K.getZ();
+
+	if (pad != 0)
+	{
+		X.appendPadding(pad);
+	}
+
+	for (size_t i = 0; i < nh; i++) {
+		for (size_t j = 0; j < nw; j++) {
+			for (size_t d = 0; d < o_ch; d++) {
+				for (size_t c = 0; c < i_ch; c++) {
+
+					double sum = 0;
+					for (size_t a = 0; a < k_s; a++) {
+						for (size_t b = 0; b < k_s; b++) {
+							sum += K(a, b, d) * X(i * str + a, j * str + b, c);
+						}
+					}
+
+					out(i, j, c, d) = sum;
+				}
+			}
+		}
+	}
+
+	//for (size_t i = 0; i < nh; i++) {
+	//	for (size_t j = 0; j < nw; j++) {
+	//		for (size_t d = 0; d < o_ch; d++) {
+	//			for (size_t ic = 0; ic < i_ch; ic++) {//hhhhhhhhhhhhhhhh
+	//				double sum = 0;
+	//				for (size_t a = 0; a < k_s; a++) {
+	//					for (size_t b = 0; b < k_s; b++) {
+	//						for (size_t c = 0; c < i_ch; c++)
+	//						{
+	//							sum += K(a, b, d) * X(i * str + a, j * str + b, c);
+	//						}
+	//					}
+	//				}
+	//				out(i, j, ic, d) = sum;
+	//			}
+	//		}
+	//	}
+	//}
+}
+
+void backtransconvInput(Tensor3d<double>& out, Tensor3d<double>& X, Tensor4d<double>& K, size_t pad, size_t str) {
+
+	//K.rotate180(); //iznachalnobilo
+
+	size_t nh = (X.getX() - 1) * str + K.getX() - 2 * pad;
+	size_t nw = (X.getY() - 1) * str + K.getY() - 2 * pad;
+
+	//hight and width for output tensor before padding
+	nh += 2 * pad;
+	nw += 2 * pad;
+
+	Tensor3d<double> nX(nh, nw, K.getZ());
+	nX.fill();
+
+	for (size_t i = 0; i < X.getY(); i++) {
+		for (size_t j = 0; j < X.getX(); j++) {
+			for (size_t c = 0; c < X.getZ(); c++) { //input 256
+
+				for (size_t a = 0; a < K.getY(); a++) {
+					for (size_t b = 0; b < K.getX(); b++) {
+						for (size_t d = 0; d < K.getZ(); d++) { //output 128
+							nX(i * str + a, j * str + b, d) += X(i, j, c) * K(a, b, d, c);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	out = nX;
+
+	if (pad != 0)
+	{
+		out.appendTransposedPadding(pad);
+	}
+}
+
+void backtransconvKernel(Tensor4d<double>& out, Tensor3d<double>& X, Tensor3d<double>& K, size_t pad, size_t str) {
+
+	//????????????????????????
+	size_t nh = (X.getX() - 1) * str + K.getX() - 2 * pad;
+	size_t nw = (X.getY() - 1) * str + K.getY() - 2 * pad;
+
+	//hight and width for output tensor before padding
+	nh += 2 * pad;
+	nw += 2 * pad;
+
+	size_t i_ch = X.getZ();
+	size_t o_ch = K.getZ();
+	Tensor4d<double> nX(4, 4, i_ch, o_ch);
+	nX.fill();
+
+	if (pad != 0) {
+		K.appendPadding(pad);
+	}
+
+	for (size_t i = 0; i < X.getY(); i++) {
+		for (size_t j = 0; j < X.getX(); j++) {
+			for (size_t c = 0; c < X.getZ(); c++) {
+
+				for (size_t a = 0; a < nX.getY(); a++) { //pomenalzn
+					for (size_t b = 0; b < nX.getX(); b++) { //pmnzn
+						for (size_t d = 0; d < o_ch; d++) {
+							nX(a, b, c, d) += X(i, j, c) * K(i * str + a, j * str + b, d); //menaem mestami // i peremennie tozzhe
+						}
+					}
+				}
+			}
+		}
+	}
+
+	out = nX;
+
+	/*if (str != 1) {
+		X.interweave();
+	}
+
+	size_t nh = (X.getX() - K.getX() + 2 * pad + str) / str;
+	size_t nw = (X.getY() - K.getY() + 2 * pad + str) / str;
+
+	size_t k_s = K.getX();
+	size_t i_ch = X.getZ();
+	size_t o_ch = K.getZ();
+
+	if (pad != 0)
+	{
+		X.appendPadding(pad);
+	}
+
+	for (size_t i = 0; i < nh; i++) {
+		for (size_t j = 0; j < nw; j++) {
+			for (size_t d = 0; d < o_ch; d++) {
+				for (size_t c = 0; c < i_ch; c++) {
+
+					double sum = 0;
+					for (size_t a = 0; a < k_s; a++) {
+						for (size_t b = 0; b < k_s; b++) {
+							sum += K(a, b, d) * X(i * str + a, j * str + b, c);
+						}
+					}
+
+					out(i, j, c, d) = sum;
+				}
+			}
+		}
+	}*/
+
+	/*if (pad != 0)
+	{
+		out.appendTransposedPadding(pad);
+	}*/
+}
+
+void backconvInput(Tensor3d<double>& out, Tensor3d<double>& X, Tensor4d<double>& K, size_t pad, size_t str) {
+	
+	//K.rotate180(); //iznachalnobilo
+
+	size_t nh = (X.getX() - K.getX() + 2 * pad + str) / str;
+	size_t nw = (X.getY() - K.getY() + 2 * pad + str) / str;
+	size_t k_s = K.getX();
+	size_t i_ch = K.getD();
+	size_t o_ch = K.getZ();
+
+	if (pad != 0)
+	{
+		X.appendPadding(pad);
+	}
+
+	for (size_t i = 0; i < nh; i++) {
+		for (size_t j = 0; j < nw; j++) {
+			for (size_t d = 0; d < o_ch; d++) {
+
+				double sum = 0;
+				for (size_t a = 0; a < k_s; a++) {
+					for (size_t b = 0; b < k_s; b++) {
+						for (size_t c = 0; c < i_ch; c++)
+						{
+							sum += K(a, b, d, c) * X(i * str + a, j * str + b, c);
+						}
+					}
+				}
+				out(i, j, d) = sum;
+			}
+		}
+	}
+}
+
 void NeuralNetwork::nn::Layer::conv()
 {
+	/*Tensor4d<double> rotated_V(V.getX(), V.getY(), V.getZ(), V.getD());
+	for (size_t i = 0; i < V.getX(); i++) {
+		for (size_t j = 0; j < V.getY(); j++) {
+			for (size_t k = 0; k < V.getZ(); k++) {
+				for (size_t l = 0; l < V.getD(); l++) {
+					rotated_V(i,j,k,l) = V(i,j,k,l);
+				}
+			}
+		}
+	}
+
+	rotated_V.rotate180();*/
 	size_t nh = (X->getX() - k_s + pad * 2 + str) / str;
 	size_t nw = (X->getY() - k_s + pad * 2 + str) / str;
 
@@ -218,7 +434,7 @@ void NeuralNetwork::nn::Layer::conv()
 					for (size_t b = 0; b < k_s; b++) {
 						for (size_t c = 0; c < i_ch; c++)
 						{
-							sum += V(a, b, c, d) * X->operator()(i * str + a, j * str + b, c);
+							sum += V(a, b, c, d) * X->operator()(i * str + a, j * str + b, c); //V
 						}
 					}
 				}
@@ -303,7 +519,7 @@ void NeuralNetwork::nn::Layer::actSigmoid()
 		for (size_t j = 0; j < X->getY(); j++) {
 			for (size_t d = 0; d < X->getZ(); d++)
 			{
-				X->operator()(i, j, d) = 1 / (1 + exp(-(X->operator()(i, j, d))));
+				X->operator()(i, j, d) = 1.0 / (1.0 + exp(-(X->operator()(i, j, d))));
 			}
 		}
 	}
@@ -316,7 +532,8 @@ void NeuralNetwork::nn::Layer::actTanh()
 			for (size_t d = 0; d < X->getZ(); d++)
 			{
 				double x = X->operator()(i, j, d);
-				X->operator()(i, j, d) = (exp(x) - exp(-x)) / (exp(x) + exp(-x));
+				/*X->operator()(i, j, d) = (exp(x) - exp(-x)) / (exp(x) + exp(-x));*/
+				X->operator()(i, j, d) = tanh(x);
 			}
 		}
 	}
@@ -344,16 +561,16 @@ void NeuralNetwork::nn::Layer::batchNorm()
 			{
 				sum_b += X->operator()(i, j, k);
 			}
-			double mju_b = (1.0 / batch) * sum_b;
+			double mju_b = (1.0 / (double)batch) * sum_b;
 			output_mju_b = mju_b;
 
 			sum_b = 0;
 			for (size_t k = 0; k < batch; k++)
 			{
-				sum_b += pow(X->operator()(i, j, k) - mju_b, 2);
+				sum_b += pow(X->operator()(i, j, k) - mju_b, 2.0);
 			}
 
-			double sigma_b = (1.0 / batch) * sum_b;
+			double sigma_b = (1.0 / (double)batch) * sum_b;
 			output_sigma_b = sigma_b;
 
 			for (size_t k = 0; k < batch; k++)
@@ -374,7 +591,7 @@ void NeuralNetwork::totalLossFunction(Discriminator& name) {
 	size_t n = outputs.size() / 2;
 	for (size_t i = 0; i < n; i++)
 	{
-		error_sum += log(outputs[i]) + log(1 - outputs[i + 1]) + log(outputs[i + 1]);  //to MIN
+		error_sum += log(outputs[i]) + log(1.0 - outputs[i + 1]) + log(outputs[i + 1]);  //to MIN
 		i++;
 	}
 	double error = -(1.0 / n) * error_sum;
@@ -447,30 +664,25 @@ void NeuralNetwork::nn::Layer::backConv()
 		}
 	}
 
-	if (pad != 0)
-	{
-		il.appendPadding(pad);
-		oZ.interweave();
-	}
-
 	//gradient kernel
 
-	for (size_t i = 0; i < X->getX(); i++) {
-		for (size_t j = 0; j < X->getY(); j++) {
-			for (size_t d = 0; d < o_ch; d++) {
+	//for (size_t i = 0; i < X->getX(); i++) {
+	//	for (size_t j = 0; j < X->getY(); j++) {
+	//		for (size_t d = 0; d < o_ch; d++) {
+	//			//double sum = 0;
+	//			for (size_t a = 0; a < k_s; a++) {
+	//				for (size_t b = 0; b < k_s; b++) {
+	//					for (size_t c = 0; c < i_ch; c++)
+	//					{
+	//						nK(a, b, c, d) += oZ(i, j, d) * il(i + a, j + b, c); //i * str + a, j * str + b, c
+	//					}
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
 
-				//double sum = 0;
-				for (size_t a = 0; a < k_s; a++) {
-					for (size_t b = 0; b < k_s; b++) {
-						for (size_t c = 0; c < i_ch; c++)
-						{
-							nK(a, b, c, d) += oZ(i, j, d) * il(i + a, j + b, c); //i * str + a, j * str + b, c
-						}
-					}
-				}
-			}
-		}
-	}
+	backconvKernel(nK, il, oZ, pad, str);
 
 	for (size_t a = 0; a < nK.getX(); a++) {
 		for (size_t b = 0; b < nK.getY(); b++) {
@@ -483,10 +695,117 @@ void NeuralNetwork::nn::Layer::backConv()
 		}
 	}
 
-	//sum_gradient_V.printTensorValues();
-	//std::cout << "===============" << std::endl;
-
 	//gradient vhodnih znachenij
+	size_t nh = 0;
+	size_t nw = 0;
+	size_t nc = 0;
+	if ((int)layer_id - 1 == -1) {
+		return; //end of function
+	}
+	else {
+		nh = l_outputs->operator[](layer_id - 1).getX();
+		nw = l_outputs->operator[](layer_id - 1).getY();
+		nc = l_outputs->operator[](layer_id - 1).getZ();
+	}
+	oZ = Tensor3d<double>(X->getX(), X->getY(), X->getZ()); //input gradient //tut bug esli oZ = *X
+	for (size_t i = 0; i < oZ.getX(); i++) {
+		for (size_t j = 0; j < oZ.getY(); j++) {
+			for (size_t k = 0; k < oZ.getZ(); k++) {
+				oZ(i, j, k) = X->operator()(i, j, k);
+			}
+		}
+	}
+	Tensor3d<double> nil;
+	nK = V;
+
+	backtransconvInput(nil, oZ, nK, pad, str);
+
+	//sdes provoditsa ne obicnnaja svertka a full convolution, poetomu pustie mesta nado zapolnit
+
+	//size_t padding = 1;
+	//while (true) {
+	//	size_t h = (X->getX() - k_s + padding * 2 + 1) / 1;
+	//	if (h < nh) {
+	//		padding++;
+	//	}
+	//	else if (h >= nh) {
+	//		break;
+	//	}
+	//}
+	//oZ.appendPadding(padding);
+
+	//for (size_t i = 0; i < nh; i++) {
+	//	for (size_t j = 0; j < nw; j++) {
+	//		for (size_t d = 0; d < nc; d++) { //o_ch
+
+	//			double sum = 0;
+	//			for (size_t a = 0; a < k_s; a++) {
+	//				for (size_t b = 0; b < k_s; b++) {
+	//					for (size_t c = 0; c < o_ch; c++) //i_ch
+	//					{
+	//						//nil(i + a, j + b, c) += nK(a, b, c, d) * oZ(i, j, d);
+	//						sum += nK(a, b, d, c) * oZ(i + a, j + b, c);
+	//					}
+	//				}
+	//			}
+	//			nil(i, j, d) = sum;
+	//		}
+	//	}
+	//}
+
+	
+
+	X->operator=(nil);
+	//X->printTensorValues();
+}
+
+void NeuralNetwork::nn::Layer::backTransposedConv()
+{
+	Tensor4d<double> nK(k_s, k_s, i_ch, o_ch); //new kernek gradient
+	nK.fill();
+
+	Tensor3d<double> il;
+	if ((int)layer_id - 1 == -1) {
+		//undefined bug when using | il = *X_input_memory
+		size_t xX = X_input_memory->getX();
+		size_t xY = X_input_memory->getY();
+		size_t xZ = X_input_memory->getZ();
+		il = Tensor3d<double>(xX, xY, xZ);
+		for (size_t i = 0; i < xX; i++) {
+			for (size_t j = 0; j < xY; j++) {
+				for (size_t k = 0; k < xZ; k++) {
+					il(i, j, k) = X_input_memory->operator()(i, j, k);
+				}
+			}
+		}
+	}
+	else
+	{
+		il = l_outputs->operator[](layer_id - 1); //X or input from past layer
+	}
+
+	Tensor3d<double> oZ(X->getX(), X->getY(), X->getZ()); //input gradient //tut bug esli oZ = *X
+	for (size_t i = 0; i < oZ.getX(); i++) {
+		for (size_t j = 0; j < oZ.getY(); j++) {
+			for (size_t k = 0; k < oZ.getZ(); k++) {
+				oZ(i, j, k) = X->operator()(i, j, k);
+			}
+		}
+	}
+
+	backtransconvKernel(nK, il, oZ, pad, str); //backtransconvKernel
+
+	for (size_t a = 0; a < nK.getX(); a++) {
+		for (size_t b = 0; b < nK.getY(); b++) {
+			for (size_t c = 0; c < nK.getZ(); c++) {
+				for (size_t d = 0; d < nK.getD(); d++)
+				{
+					sum_gradient_V(a, b, c, d) += nK(a, b, c, d);
+				}
+			}
+		}
+	}
+
 	size_t nh = 0;
 	size_t nw = 0;
 	size_t nc = 0;
@@ -501,46 +820,96 @@ void NeuralNetwork::nn::Layer::backConv()
 	Tensor3d<double> nil(nh, nw, nc);
 	nil.fill();
 	nK = V;
-	nK.rotate180();
 
-	//sdes provoditsa ne obicnnaja svertka a full convolution, poetomu pustie mesta nado zapolnit
-
-	size_t padding = 1;
-	while (true) {
-		size_t h = (X->getX() - k_s + padding * 2 + 1) / 1;
-		if (h < nh) {
-			padding++;
-		}
-		else if (h >= nh) {
-			break;
-		}
-	}
-	oZ.appendPadding(padding);
-
-	for (size_t i = 0; i < nh; i++) {
-		for (size_t j = 0; j < nw; j++) {
-			for (size_t d = 0; d < nc; d++) { //o_ch
-
-				double sum = 0;
-				for (size_t a = 0; a < k_s; a++) {
-					for (size_t b = 0; b < k_s; b++) {
-						for (size_t c = 0; c < o_ch; c++) //i_ch
-						{
-							//nil(i + a, j + b, c) += nK(a, b, c, d) * oZ(i, j, d);
-							sum += nK(a, b, d, c) * oZ(i + a, j + b, c);
-						}
-					}
-				}
-				nil(i, j, d) = sum;
+	oZ = Tensor3d<double>(X->getX(), X->getY(), X->getZ()); //input gradient //tut bug esli oZ = *X
+	for (size_t i = 0; i < oZ.getX(); i++) {
+		for (size_t j = 0; j < oZ.getY(); j++) {
+			for (size_t k = 0; k < oZ.getZ(); k++) {
+				oZ(i, j, k) = X->operator()(i, j, k);
 			}
 		}
 	}
-	X->operator=(nil);
-	//X->printTensorValues();
-}
 
-void NeuralNetwork::nn::Layer::backTransposedConv()
-{
+	backconvInput(nil, oZ, nK, pad, str);
+
+	X->operator=(nil);
+	//nK.rotate180();
+	//if (pad != 0)
+	//{
+	//	oZ.appendPadding(pad);
+	//}
+	//for (size_t i = 0; i < nh; i++) {
+	//	for (size_t j = 0; j < nw; j++) {
+	//		for (size_t d = 0; d < nc; d++) {
+	//			double sum = 0;
+	//			for (size_t a = 0; a < k_s; a++) {
+	//				for (size_t b = 0; b < k_s; b++) {
+	//					for (size_t c = 0; c < o_ch; c++)
+	//					{
+	//						sum += oZ(i * str + a, j * str + b, c) * nK(a, b, d, c);
+	//					}
+	//				}
+	//			}
+	//			nil(i, j, d) = sum;
+	//			//std::cout << nX(i, j, d) << std::endl;
+	//		}
+	//	}
+	//}
+	//oZ = Tensor3d<double>(X->getX(), X->getY(), X->getZ()); //input gradient //tut bug esli oZ = *X
+	//for (size_t i = 0; i < oZ.getX(); i++) {
+	//	for (size_t j = 0; j < oZ.getY(); j++) {
+	//		for (size_t k = 0; k < oZ.getZ(); k++) {
+	//			oZ(i, j, k) = X->operator()(i, j, k);
+	//		}
+	//	}
+	//}
+
+
+
+	//X->operator=(nil);
+
+
+	//kernel
+
+	//if (pad != 0)
+	//{
+	//	il.interweave(); //jadro
+	//	oZ.appendPadding(pad+1); //vhodnoe
+	//}
+
+	//for (size_t i = 0; i < k_s; i++) {
+	//	for (size_t j = 0; j < k_s; j++) {
+	//		for (size_t d = 0; d < o_ch; d++) {
+	//			double sum = 0;
+	//			for (size_t c = 0; c < i_ch; c++) {
+	//				for (size_t a = 0; a < il.getX(); a++) {
+	//					for (size_t b = 0; b < il.getY(); b++) {
+	//						sum += il(a, b, c) * oZ(i + a, j + b, d);
+	//					}
+	//				}
+	//				nK(i, j, c, d) = sum;
+	//			}
+	//			//std::cout << nX(i, j, d) << std::endl;
+	//		}
+	//	}
+	//}
+
+
+	//for (size_t i = 0; i < X->getX(); i++) {
+	//	for (size_t j = 0; j < X->getY(); j++) {
+	//		for (size_t d = 0; d < o_ch; d++) {
+	//			//double sum = 0;
+	//			for (size_t a = 0; a < k_s; a++) {
+	//				for (size_t b = 0; b < k_s; b++) {
+	//					for (size_t c = 0; c < i_ch; c++)
+	//					{
+	//						nK(a, b, c, d) += oZ(i + a, j + b, d) * il(i, j, c); //i * str + a, j * str + b, c
+	//					}
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
 }
 
 void NeuralNetwork::nn::Layer::backBatchNorm()
@@ -559,7 +928,7 @@ void NeuralNetwork::nn::Layer::backBatchNorm()
 				gradient_beta += X->operator()(i, j, k);
 				gradient_gamma += (X->operator()(i, j, k) * output_inter_x(i, j, k));
 				gradient_inter_x(i, j, k) = (X->operator()(i, j, k) * gamma);
-				gradient_sigma_b += ((gradient_inter_x(i, j, k) * (input_x_in_batch(i, j, k) - output_mju_b)) * (-1 / 2) * pow(output_sigma_b + epsilon, -3 / 2));
+				gradient_sigma_b += ((gradient_inter_x(i, j, k) * (input_x_in_batch(i, j, k) - output_mju_b)) * (- 1.0 / 2.0) * pow(output_sigma_b + epsilon, -3.0 / 2.0));
 			}
 		}
 	}
@@ -571,19 +940,19 @@ void NeuralNetwork::nn::Layer::backBatchNorm()
 	for (size_t i = 0; i < X->getX(); i++) {
 		for (size_t j = 0; j < X->getY(); j++) {
 			for (size_t k = 0; k < X->getZ(); k++) {
-				temp1 += gradient_inter_x(i, j, k) * (-1 / sqrt(output_sigma_b + epsilon));
-				temp2 += -2 * (input_x_in_batch(i, j, k) - output_mju_b);
+				temp1 += gradient_inter_x(i, j, k) * (-1.0 / sqrt(output_sigma_b + epsilon));
+				temp2 += -2.0 * (input_x_in_batch(i, j, k) - output_mju_b);
 			}
 		}
 	}
 
-	gradient_mju_b = temp1 + gradient_sigma_b * (temp2 / batch);
+	gradient_mju_b = temp1 + gradient_sigma_b * (temp2 / (double)batch);
 
 	//gradient input
 	for (size_t i = 0; i < X->getX(); i++) {
 		for (size_t j = 0; j < X->getY(); j++) {
 			for (size_t k = 0; k < X->getZ(); k++) {
-				X->operator()(i, j, k) = gradient_inter_x(i, j, k) * (1 / sqrt(output_sigma_b + epsilon)) + gradient_sigma_b * ((2 * (input_x_in_batch(i, j, k) - output_mju_b)) / batch) + gradient_mju_b * (1 / batch);
+				X->operator()(i, j, k) = gradient_inter_x(i, j, k) * (1.0 / sqrt(output_sigma_b + epsilon)) + gradient_sigma_b * ((2.0 * (input_x_in_batch(i, j, k) - output_mju_b)) / (double)batch) + gradient_mju_b * ((double)1.0 / (double)batch);
 			}
 		}
 	}
@@ -609,11 +978,11 @@ void NeuralNetwork::nn::Layer::updateParameters()
 				for (size_t l = 0; l < o_ch; l++)
 				{
 					//vichislenie gradienta vesov
-					gradient_V(i, j, k, l) = sum_gradient_V(i, j, k, l) / nbatch;
-					momentum1_m(i, j, k, l) = m_beta1 * prev_momentum1_m(i, j, k, l) + (1 - m_beta1) * gradient_V(i, j, k, l);
-					momentum2_v(i, j, k, l) = m_beta2 * prev_momentum2_v(i, j, k, l) + (1 - m_beta2) * pow(gradient_V(i, j, k, l), 2);
-					corrected_momentum1_m(i, j, k, l) = momentum1_m(i, j, k, l) / (1 - pow(m_beta1, w_timestep));
-					corrected_momentum2_v(i, j, k, l) = momentum2_v(i, j, k, l) / (1 - pow(m_beta2, w_timestep));
+					gradient_V(i, j, k, l) = sum_gradient_V(i, j, k, l) / (double)nbatch;
+					momentum1_m(i, j, k, l) = m_beta1 * prev_momentum1_m(i, j, k, l) + (1.0 - m_beta1) * gradient_V(i, j, k, l);
+					momentum2_v(i, j, k, l) = m_beta2 * prev_momentum2_v(i, j, k, l) + (1.0 - m_beta2) * pow(gradient_V(i, j, k, l), 2.0);
+					corrected_momentum1_m(i, j, k, l) = momentum1_m(i, j, k, l) / (1.0 - pow(m_beta1, w_timestep));
+					corrected_momentum2_v(i, j, k, l) = momentum2_v(i, j, k, l) / (1.0 - pow(m_beta2, w_timestep));
 					//V(i, j, k, l) = V(i, j, k, l) - (learning_rate / (sqrt(corrected_momentum2_v(i, j, k, l)) + epsilon)) * corrected_momentum1_m(i, j, k, l);
 					V(i, j, k, l) = V(i, j, k, l) - learning_rate * (corrected_momentum1_m(i, j, k, l) / (sqrt(corrected_momentum2_v(i, j, k, l)) + epsilon));
 					//sohr parametrov
@@ -626,22 +995,22 @@ void NeuralNetwork::nn::Layer::updateParameters()
 
 	//batch normalization
 	bn_timestep++;
-	double gradient_beta = sum_gradient_beta / nbatch;
-	double gradient_gamma = sum_gradient_gamma / nbatch;
+	double gradient_beta = sum_gradient_beta / (double)nbatch;
+	double gradient_gamma = sum_gradient_gamma / (double)nbatch;
 
 	//update beta
-	double batchn_beta_momentum1_m = m_beta1 * batchn_beta_prev_momentum1_m + (1 - m_beta1) * gradient_beta;
-	double batchn_beta_momentum2_v = m_beta2 * batchn_beta_prev_momentum2_v + (1 - m_beta2) * pow(gradient_beta, 2);
-	double corrected_batchn_beta_momentum1_m = batchn_beta_momentum1_m / (1 - pow(m_beta1, bn_timestep));
-	double corrected_batchn_beta_momentum2_v = batchn_beta_momentum2_v / (1 - pow(m_beta2, bn_timestep));
+	double batchn_beta_momentum1_m = m_beta1 * batchn_beta_prev_momentum1_m + (1.0 - m_beta1) * gradient_beta;
+	double batchn_beta_momentum2_v = m_beta2 * batchn_beta_prev_momentum2_v + (1.0 - m_beta2) * pow(gradient_beta, 2.0);
+	double corrected_batchn_beta_momentum1_m = batchn_beta_momentum1_m / (1.0 - pow(m_beta1, bn_timestep));
+	double corrected_batchn_beta_momentum2_v = batchn_beta_momentum2_v / (1.0 - pow(m_beta2, bn_timestep));
 	//beta = beta - (learning_rate / (sqrt(corrected_batchn_beta_momentum2_v) + epsilon)) * corrected_batchn_beta_momentum1_m;
 	beta = beta - learning_rate * (corrected_batchn_beta_momentum1_m / (sqrt(corrected_batchn_beta_momentum2_v) + epsilon));
 
 	//update gamma
-	double batchn_gamma_momentum1_m = m_beta1 * batchn_gamma_prev_momentum1_m + (1 - m_beta1) * gradient_gamma;
-	double batchn_gamma_momentum2_v = m_beta2 * batchn_gamma_prev_momentum2_v + (1 - m_beta2) * pow(gradient_gamma, 2);
-	double corrected_batchn_gamma_momentum1_m = batchn_gamma_momentum1_m / (1 - pow(m_beta1, bn_timestep));
-	double corrected_batchn_gamma_momentum2_v = batchn_gamma_momentum2_v / (1 - pow(m_beta2, bn_timestep));
+	double batchn_gamma_momentum1_m = m_beta1 * batchn_gamma_prev_momentum1_m + (1.0 - m_beta1) * gradient_gamma;
+	double batchn_gamma_momentum2_v = m_beta2 * batchn_gamma_prev_momentum2_v + (1.0 - m_beta2) * pow(gradient_gamma, 2.0);
+	double corrected_batchn_gamma_momentum1_m = batchn_gamma_momentum1_m / (1.0 - pow(m_beta1, bn_timestep));
+	double corrected_batchn_gamma_momentum2_v = batchn_gamma_momentum2_v / (1.0 - pow(m_beta2, bn_timestep));
 	//gamma = gamma - (learning_rate / (sqrt(corrected_batchn_gamma_momentum2_v) + epsilon)) * corrected_batchn_gamma_momentum1_m;
 	gamma = gamma - learning_rate * (corrected_batchn_gamma_momentum1_m / (sqrt(corrected_batchn_gamma_momentum2_v) + epsilon));
 
